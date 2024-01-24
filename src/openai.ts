@@ -1,8 +1,8 @@
 import { examples } from "./constants"
-import { log } from "./utils"
+import { log, uniqueStringArray } from "./utils"
 import config from "./config"
 
-export const getHints = async (contents: string, languageId: string) => {
+export const getHints = async (contents: string, languageId: string, suggestions = 3) => {
   const messages = [
     {
       "role": "system",
@@ -18,7 +18,7 @@ export const getHints = async (contents: string, languageId: string) => {
   const body = {
     "model": config.openaiModel,
     "max_tokens": 2048,
-    "n": 1,
+    "n": suggestions,
     "temperature": 0.7,
     "top_p": 1,
     "frequency_penalty": 0,
@@ -41,5 +41,5 @@ export const getHints = async (contents: string, languageId: string) => {
   }
 
   const data = await response.json()
-  return data?.choices?.map(i => i.message?.content)
+  return uniqueStringArray(data?.choices?.map(i => i.message?.content))
 }

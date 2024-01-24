@@ -9,10 +9,15 @@ export const getContent = async (contents: string, line: number, column: number)
 
 export const log = (...args: any) => {
   if (!config.logFile) return
-  appendFileSync(config.logFile, xlog(...args) + "\n\n")
+
+  if (Bun.env.TEST_RUNNER) {
+    console.log(xlog(...args))
+  } else {
+    appendFileSync(config.logFile, xlog(...args) + "\n\n")
+  }
 }
 
-const xlog = (...args: any) => {
+export const xlog = (...args: any) => {
   let newArgs = [];
 
   args.forEach((arg) => {
@@ -24,4 +29,6 @@ const xlog = (...args: any) => {
   return ["APP", new Date().toISOString(), "-->", ...newArgs].join(' ')
 };
 
-
+export const uniqueStringArray = (array: string[]): string[] => {
+  return Array.from(new Set(array));
+};

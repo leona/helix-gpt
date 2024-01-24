@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build:bin": "bun build ./src/app.ts --outfile=./dist/helix-gpt --compile",
-    "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun"
+    "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun",
+    "test": "TEST_RUNNER=true bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"

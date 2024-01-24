@@ -61,8 +61,19 @@ const main = async () => {
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
-    if (contentVersion - 2 > lastContentVersion) {
+    const skip = () => {
+      ctx.send({
+        id: request.id,
+        result: {
+          isIncomplete: true,
+          items: []
+        }
+      })
+    }
+
+    if (contentVersion > lastContentVersion) {
       log("skipping because content is stale", contentVersion, ">", lastContentVersion)
+      skip()
       return
     }
 
@@ -71,6 +82,7 @@ const main = async () => {
 
     if (!triggerCharacters.includes(content.slice(-1))) {
       log("skipping", content.slice(-1), "not in", triggerCharacters)
+      skip()
       return
     }
 
@@ -111,7 +123,7 @@ const main = async () => {
     ctx.send({
       id: request.id,
       result: {
-        isIncomplete: false,
+        isIncomplete: true,
         items
       }
     })
