@@ -2,7 +2,7 @@
 
 Code completion LSP for [Helix](https://github.com/helix-editor/helix) utilising the OpenAI chat API.
 
-![](https://github.com/leona/helix-gpt/raw/master/dist/example.gif)
+![](https://github.com/leona/helix-gpt/raw/master/assets/example.gif)
 
 ## Goals
 - No dependencies

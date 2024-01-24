@@ -1,0 +1,102 @@
+name: Release
+on:
+  push:
+    tags:
+    - '[0-9]+.[0-9]+'
+    - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+    paths:
+    - '.github/workflows/release.yml'
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+        
+      - name: Build binary
+        run: bun run build:bin
+
+      - name: Build smol
+        run: bun run build:smol
+        
+      - name: Set release
+        shell: bash
+        run: |
+          name=dev
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            name=${GITHUB_REF:10}
+          fi
+
+          export VERSION="$name"
+          export ARCH=x86_64-linux
+          export APP=helix-gpt
+          export OUTPUT="$APP-$VERSION-$ARCH"
+
+          mv dist/helix-gpt dist/$OUTPUT
+          mv dist/helix-gpt.js "dist/$APP-$VERSION.js"
+
+      - uses: actions/upload-artifact@v4
+        if: vars.RUNNER != 'act'
+        with:
+          name: bins
+          path: dist
+
+  publish:
+    name: Publish
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+
+      - name: Build archive
+        shell: bash
+        run: |
+          set -ex
+
+          source="$(pwd)"
+          cd "$(mktemp -d)"
+          mv $source/bins* .
+          mkdir dist
+
+          for bin in bins/*; do
+            if [[ "$bin" == *.js ]]; then
+              continue
+            fi
+          
+            filename=$(basename ${bin})  
+            tar -czvf dist/$filename.tar.gz $bin
+            rm -f $bin
+          done
+
+          tar -czvf dist/helix-gpt-$GITHUB_REF_NAME-source.tar.gz -C $source .
+          mv dist $source/
+
+      - name: Upload binaries to release
+        if: vars.RUNNER != 'act'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GH_TOKEN }}
+          file: dist/*
+          file_glob: true
+          tag: ${{ github.ref_name }}
+          overwrite: true
+      
+      - name: Upload binaries as artifact
+        if: vars.RUNNER != 'act'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: dist/*
