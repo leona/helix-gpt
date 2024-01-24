@@ -62,19 +62,22 @@ This was made to run with [Bun](https://bun.sh/), but you can find a binary belo
 
 Without bun
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1-x86_64-linux.tar.gz -O /tmp/helix-gpt.tar.gz && tar -zxvf helix-gpt.tar.gz && mv helix-gpt-0.1-x86_64-linux /usr/bin/helix-gpt && chmod +x /usr/bin/helix-gpt```
+wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1-x86_64-linux.tar.gz -O /tmp/helix-gpt.tar.gz && tar -zxvf helix-gpt.tar.gz && mv helix-gpt-0.1-x86_64-linux /usr/bin/helix-gpt && chmod +x /usr/bin/helix-gpt
+```
 
 With bun (must use the args option in the previous step)
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1.js -O helix-gpt.js```
+wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1.js -O helix-gpt.js
+```
 
 
 ### All done
 If you are having issues, check both the helix-gpt and helix log files.
 
 ```bash
-tail -f /app/.cache/helix/helix.log
-tail -f /app/helix.log```
+tail -f /root/.cache/helix/helix.log
+tail -f /app/helix-gpt.log
+```
 
 ### Thanks
 [rsc1975](https://github.com/rsc1975/bun-docker) for their bun Dockerfile
