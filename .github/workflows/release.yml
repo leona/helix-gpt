@@ -72,13 +72,14 @@ jobs:
           mkdir dist
 
           for bin in bins/*; do
+            filename=$(basename ${bin})  
+          
             if [[ "$bin" == *.js ]]; then
+              mv $bin dist/$filename 
               continue
             fi
           
-            filename=$(basename ${bin})  
-            tar -czvf dist/$filename.tar.gz $bin
-            rm -f $bin
+            tar -C `dirname $bin` -czvf dist/$filename.tar.gz --transform 's,^.*/,,g' `basename $bin`
           done
 
           tar -czvf dist/helix-gpt-$GITHUB_REF_NAME-source.tar.gz -C $source .
