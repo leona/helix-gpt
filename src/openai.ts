@@ -17,11 +17,12 @@ export const getHints = async (contents: string, languageId: string, suggestions
 
   const body = {
     "model": config.openaiModel,
-    "max_tokens": 2048,
+    "max_tokens": parseInt(config.openaiMaxTokens as string),
     "n": suggestions,
-    "temperature": 0.7,
-    "top_p": 1,
-    "frequency_penalty": 0,
+    "temperature": 1,
+    "top_p": 0.7,
+    "frequency_penalty": 1,
+    presence_penalty: 2,
     messages
   }
 
@@ -37,6 +38,7 @@ export const getHints = async (contents: string, languageId: string, suggestions
   })
 
   if (!response.ok) {
+    log("openai error", response.status, await response.text())
     throw new Error("openai request failed with code: " + response.status)
   }
 

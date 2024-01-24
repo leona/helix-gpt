@@ -67,21 +67,25 @@ const main = async () => {
     }
 
     log("calling completion event", contentVersion, "<", lastContentVersion)
-    const content = await getContent(contents, request.params.position.line, request.params.position.character)
+    const { lastCharacter, lastLine, templatedContent } = await getContent(contents, request.params.position.line, request.params.position.character)
 
-    if (!triggerCharacters.includes(content.slice(-1))) {
-      log("skipping", content.slice(-1), "not in", triggerCharacters)
+    if (!triggerCharacters.includes(lastCharacter)) {
+      log("skipping", lastCharacter, "not in", triggerCharacters)
       skip()
       return
     }
 
-    const hints = await getHints(content, language)
+    const hints = await getHints(templatedContent, language)
 
     log("sending completion", JSON.stringify({
-      content, hints
+      templatedContent, hints
     }))
 
     const items = hints?.map((i) => {
+      if (i.startsWith(lastLine.trim())) {
+        i = i.slice(lastLine.trim().length)
+      }
+
       const lines = i.split('\n')
       const cleanLine = request.params.position.line + lines.length - 1
       let cleanCharacter = lines.slice(-1)[0].length
