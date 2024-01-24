@@ -19,8 +19,9 @@ Environment vars
 OPENAI_MODEL=gpt-3.5-turbo-16k # Optional
 OPENAI_API_KEY=123 # required
 OPENAI_MAX_TOKENS=7000 # optional
-LOG_FILE=/app/debug-helix-gpt.log # Optional
 OPENAI_CONTEXT="A terrible code completion assistant" # Optional
+OEPNAI_ENDPOINT=https://api.openai.com/v1/chat/completions # Optional
+LOG_FILE=/app/debug-helix-gpt.log # Optional
 ```
 
 Args (add to `command = "helix-gpt"` below)

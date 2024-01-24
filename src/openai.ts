@@ -28,7 +28,7 @@ export const getHints = async (contents: string, languageId: string, suggestions
 
   log("sending openai request", JSON.stringify(messages))
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch(config.openaiEndpoint as string, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${config.openaiKey}`,

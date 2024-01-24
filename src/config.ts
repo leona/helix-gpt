@@ -23,6 +23,10 @@ const { values } = parseArgs({
     logFile: {
       type: 'string',
       default: Bun.env.LOG_FILE
+    },
+    openaiEndpoint: {
+      type: 'string',
+      default: Bun.env.OPENAI_ENDPOINT ?? 'https://api.openai.com/v1/chat/completions'
     }
   },
   strict: true,
