@@ -1,6 +1,8 @@
 # helix-gpt
 
-Code completion LSP for Helix utilising the OpenAI chat API.
+Code completion LSP for [Helix](https://github.com/helix-editor/helix) utilising the OpenAI chat API.
+
+![](https://github.com/leona/helix-gpt/raw/master/dist/example.gif)
 
 ## Goals
 - No dependencies
