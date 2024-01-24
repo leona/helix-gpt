@@ -174,3 +174,4 @@ out
 .DS_Store
 
 helix-gpt.log
+dist/

@@ -17,7 +17,7 @@ You can configure helix-gpt by exposing either the environment variables below, 
 Environment vars
 ```
 OPENAI_MODEL=gpt-3.5-turbo # Optional
-OPENAI_KEY=123 # required
+OPENAI_API_KEY=123 # required
 LOG_FILE=/app/debug-helix-gpt.log # Optional
 OPENAI_CONTEXT="A terrible code completion assistant" # Optional
 ```

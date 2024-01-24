@@ -1,12 +1,12 @@
 import { parseArgs } from "util"
 import { context } from "./constants"
 
-const { values, positionals } = parseArgs({
+const { values } = parseArgs({
   args: Bun.argv,
   options: {
     openaiKey: {
       type: 'string',
-      default: Bun.env.OPENAI_KEY
+      default: Bun.env.OPENAI_API_KEY
     },
     openaiContext: {
       type: 'string',
