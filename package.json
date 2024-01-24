@@ -1,0 +1,15 @@
+{
+  "name": "helix-gpt",
+  "module": "src/app.ts",
+  "type": "module",
+  "scripts": {
+    "build:bin": "bun build ./src/app.ts --outfile=./dist/helix-gpt --compile",
+    "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

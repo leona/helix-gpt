@@ -1,0 +1,18 @@
+[language-server.gpt]
+command = "bun"
+args = ["run", "/app/src/app.ts"]
+
+[language-server.ts]
+command = "typescript-language-server"
+args = ["--stdio"]
+language-id = "javascript"
+
+[[language]]
+name = "typescript"
+auto-format = true
+indent = { tab-width = 2, unit = " " }
+language-servers = [
+    "ts",
+    "gpt"
+]
+

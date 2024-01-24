@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  dev:
+    container_name: helix-gpt_dev
+    env_file: .env
+    build:
+      dockerfile: ./Dockerfile
+    command: bash -c "sleep 999999s"
+    restart: unless-stopped
+    working_dir: /app
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./:/app
+  build:
+    container_name: helix-gpt_build
+    build:
+      dockerfile: ./Dockerfile
+    command: bash -c "bun install; bun run prod:api"
+    restart: unless-stopped
+    working_dir: /app
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./:/app
