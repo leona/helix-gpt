@@ -111,16 +111,7 @@ const main = async () => {
     ctx.send({
       id: request.id,
       result: {
-        isIncomplete: true,
-        items
-      }
-    })
-
-    // Fixes a weird issue with it throwing away requests
-    ctx.send({
-      id: request.id + 1,
-      result: {
-        isIncomplete: true,
+        isIncomplete: false,
         items
       }
     })

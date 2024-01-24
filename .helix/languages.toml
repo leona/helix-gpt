@@ -1,6 +1,5 @@
 [language-server.gpt]
-command = "bun"
-args = ["run", "/app/src/app.ts"]
+command = "helix-gpt"
 
 [language-server.ts]
 command = "typescript-language-server"

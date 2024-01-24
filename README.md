@@ -59,7 +59,7 @@ args = ["run", "/app/helix-gpt.js"]
 This was made to run with [Bun](https://bun.sh/), but you can find a binary below with the runtime included.
 
 Without bun
-`wget https://github.com/leona/helix-gpt/raw/master/dist/helix-gpt -o /usr/bin/helix-gpt`
+`wget https://github.com/leona/helix-gpt/raw/master/dist/helix-gpt -O /usr/bin/helix-gpt && chmod +x /usr/bin/helix-gpt`
 
 With bun (must use the args option in the previous step)
 `wget https://raw.githubusercontent.com/leona/helix-gpt/master/dist/helix-gpt.js`
