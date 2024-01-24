@@ -20,7 +20,6 @@ services:
     build:
       dockerfile: ./Dockerfile
     command: bash -c "bun install; bun run build:smol; bun run build:bin"
-    restart: unless-stopped
     working_dir: /app
     logging:
       options:

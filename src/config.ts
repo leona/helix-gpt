@@ -25,4 +25,8 @@ const { values, positionals } = parseArgs({
   allowPositionals: true,
 });
 
+if (!values.openaiKey?.length) {
+  throw new Error("no openai key provided")
+}
+
 export default values
