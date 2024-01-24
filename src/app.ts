@@ -2,7 +2,6 @@ import Lsp from "./lsp"
 import { getContent, log } from "./utils"
 import { getHints } from "./openai"
 
-
 const main = async () => {
   let contents: string = ""
   let language: string
