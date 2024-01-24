@@ -71,3 +71,12 @@ If you are having issues, check both the helix-gpt and helix log files.
 `tail -f /app/.cache/helix/helix.log`
 
 `tail -f /app/helix.log`
+
+### Thanks
+[rsc1975](https://github.com/rsc1975/bun-docker) for their bun Dockerfile
+
+### Todo
+- Copilot support
+- Self hosted model support
+- inlineCompletionProvider (if/when Helix gets support)
+- Error fixing assistant
