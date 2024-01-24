@@ -6,40 +6,24 @@ const main = async () => {
   let contents: string = ""
   let language: string
   let completionTimeout: NodeJS.Timeout
-  let initialized = false
   let contentVersion = 0
   const triggerCharacters = ["{", "(", ")", "=", ">", " ", ",", ":"]
-  const lsp = new Lsp.Service()
+
+  const lsp = new Lsp.Service({
+    capabilities: {
+      completionProvider: {
+        resolveProvider: false,
+        triggerCharacters
+      },
+      textDocumentSync: {
+        change: 1,
+      }
+    },
+  })
 
   lsp.on(Lsp.Event.Shutdown, ({ ctx, request }) => {
     log("received shutdown request")
     process.exit(0)
-  })
-
-  lsp.on(Lsp.Event.Exit, ({ ctx, request }) => {
-    log("shutting down")
-    process.exit(0)
-  })
-
-  lsp.on(Lsp.Event.Initialize, async ({ ctx }) => {
-    if (initialized) return
-    initialized = true
-
-    ctx.send({
-      method: Lsp.Event.Initialize,
-      id: 0,
-      result: {
-        capabilities: {
-          completionProvider: {
-            resolveProvider: false,
-            triggerCharacters
-          },
-          textDocumentSync: {
-            change: 1,
-          }
-        },
-      }
-    })
   })
 
   lsp.on(Lsp.Event.DidOpen, async ({ request }) => {

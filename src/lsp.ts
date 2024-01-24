@@ -11,8 +11,25 @@ enum Event {
 }
 
 class Service {
-  constructor() {
+  emitter: EventEmitter
+  capabilities: any
+
+  constructor({ capabilities }) {
     this.emitter = new EventEmitter()
+    this.capabilities = capabilities
+    this.registerInit()
+  }
+
+  registerInit() {
+    this.on(Event.Initialize, async ({ ctx }) => {
+      ctx.send({
+        method: Event.Initialize,
+        id: 0,
+        result: {
+          capabilities: this.capabilities
+        }
+      })
+    })
   }
 
   on(event: string, callback: (any)) {
