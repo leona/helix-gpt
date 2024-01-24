@@ -39,8 +39,6 @@ language-id = "javascript"
 
 [[language]]
 name = "typescript"
-auto-format = true
-indent = { tab-width = 2, unit = " " }
 language-servers = [
     "ts",
     "gpt"
@@ -59,8 +57,15 @@ args = ["run", "/app/helix-gpt.js"]
 This was made to run with [Bun](https://bun.sh/), but you can find a binary below with the runtime included.
 
 Without bun
-`wget -o /usr/bin/helix-gpt `
+`wget https://github.com/leona/helix-gpt/raw/master/dist/helix-gpt -o /usr/bin/helix-gpt`
 
 With bun (must use the args option in the previous step)
-`wget `
+`wget https://raw.githubusercontent.com/leona/helix-gpt/master/dist/helix-gpt.js`
 
+
+### All done
+If you are having issues, check both the helix-gpt and helix log files.
+
+`tail -f /app/.cache/helix/helix.log`
+
+`tail -f /app/helix.log`
