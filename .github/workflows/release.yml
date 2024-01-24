@@ -85,12 +85,6 @@ jobs:
           tar -czvf dist/helix-gpt-$GITHUB_REF_NAME-source.tar.gz -C $source .
           mv dist $source/
           
-      - name: Test
-        shell: bash
-        run: |
-          ls
-          ls dist/
-
       - name: Upload binaries to release
         if: vars.RUNNER != 'act'
         uses: svenstaro/upload-release-action@v2
