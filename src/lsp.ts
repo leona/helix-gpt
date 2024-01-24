@@ -27,14 +27,15 @@ class Service {
     })
   }
 
-  send({ method, id, result }: { method: Event, id: number, result: any }) {
+  send({ method, id, result, params }: { method: Event, id: number, result: any, params: any }) {
     if (result === null) return
 
     const request = JSON.stringify({
       jsonrpc: "2.0",
       method,
       id,
-      result
+      result,
+      params
     })
 
     console.log(`Content-Length: ${request.length}\r\n\r\n${request}`)

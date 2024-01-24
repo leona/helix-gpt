@@ -2,6 +2,7 @@ import Lsp from "./lsp"
 import { getContent, log } from "./utils"
 import { getHints } from "./openai"
 
+
 const main = async () => {
   let contents: string = ""
   let language: string
@@ -13,6 +14,11 @@ const main = async () => {
 
   lsp.on(Lsp.Event.Shutdown, ({ ctx, request }) => {
     log("received shutdown request")
+    process.exit(0)
+  })
+
+  lsp.on(Lsp.Event.Exit, ({ ctx, request }) => {
+    log("shutting down")
     process.exit(0)
   })
 
@@ -65,7 +71,7 @@ const main = async () => {
       ctx.send({
         id: request.id,
         result: {
-          isIncomplete: true,
+          isIncomplete: false,
           items: []
         }
       })
