@@ -39,7 +39,7 @@ You can configure helix-gpt by exposing either the environment variables below, 
 [All configuration options](https://github.com/leona/helix-gpt/blob/master/src/config.ts)
 
 NOTE: Copilot is the best choice due to the model and implementation.
-.
+
 #### Environment Variables
 
 ```bash
