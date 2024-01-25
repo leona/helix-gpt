@@ -107,6 +107,6 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 ### Todo
 
 - [x] Copilot support
-- Self-hosted model support
+- Self-hosted model support (partial support if they are openai compliant)
 - Inline completion provider (pending support from Helix)
 - Error fixing assistant
