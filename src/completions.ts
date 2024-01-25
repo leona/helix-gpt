@@ -14,7 +14,7 @@ export const openaiCompliantRequest = async (endpoint: string, headers: Record<s
 
   if (!response.ok) {
     log("completion error", response.status, await response.text())
-    throw new Error("completion request failed with code: " + response.status)
+    throw new Error("with status code " + response.status)
   }
 
   const data = await response.json()
@@ -49,7 +49,7 @@ export const completionHandlers = {
       "Content-Type": "application/json"
     }
 
-    return openaiCompliantRequest(config.openaiEndpoint as string, headers, body)
+    return await openaiCompliantRequest(config.openaiEndpoint as string, headers, body)
   },
   copilot: async (contents: any, language: string, suggestions = 3) => {
     const parsedToken = parseQueryStringToken(copilotToken)
@@ -111,13 +111,18 @@ export const completionHandlers = {
       "Accept": "*/*",
       "Connection": "close"
     }
-
-    return openaiCompliantRequest(config.copilotEndpoint as string + "/chat/completions", headers, body)
+    try {
+      return await openaiCompliantRequest(config.copilotEndpoint as string + "/chat/completions", headers, body)
+    } catch (e) {
+      log("copilot request failed: " + e.message)
+      throw e
+    }
   }
 }
 
 export const completion = (contents: any, language: string, suggestions = 3) => {
   if (!completionHandlers[config.handler]) {
+    log("completion handler does not exist")
     throw new Error(`completion handler: ${config.handler} does not exist`)
   }
 
@@ -126,5 +131,8 @@ export const completion = (contents: any, language: string, suggestions = 3) => 
     return completionHandlers[config.handler](contents, language, suggestions)
   } catch (e) {
     log("completion failed", e.message)
+    throw new Error("Completion failed: " + e.message)
   }
 }
+
+

@@ -3,38 +3,18 @@ import { getContent, log } from "./utils"
 import { completion as handlerCompletion } from "./completions"
 
 const main = async () => {
-  let contents: string = ""
-  let language: string
   let completionTimeout: NodeJS.Timeout
-  let contentVersion = 0
-  const triggerCharacters = ["{", "(", ")", "=", ">", " ", ",", ":"]
 
   const lsp = new Lsp.Service({
     capabilities: {
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters
+        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":"]
       },
       textDocumentSync: {
         change: 1,
       }
-    },
-  })
-
-  lsp.on(Lsp.Event.Shutdown, ({ ctx, request }) => {
-    log("received shutdown request")
-    process.exit(0)
-  })
-
-  lsp.on(Lsp.Event.DidOpen, async ({ request }) => {
-    contents = request.params.textDocument.text
-    language = request.params.textDocument.languageId
-    contentVersion = 0
-  })
-
-  lsp.on(Lsp.Event.DidChange, async ({ request }) => {
-    contents = request.params.contentChanges[0].text
-    contentVersion = request.params.textDocument.version
+    }
   })
 
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
@@ -42,7 +22,7 @@ const main = async () => {
       clearTimeout(completionTimeout)
     }
 
-    const lastContentVersion = contentVersion
+    const lastContentVersion = ctx.contentVersion
     log("processing completion event", lastContentVersion)
 
     completionTimeout = setTimeout(() => {
@@ -52,6 +32,8 @@ const main = async () => {
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
     const skip = () => {
+      ctx.resetDiagnostics()
+
       ctx.send({
         id: request.id,
         result: {
@@ -61,22 +43,45 @@ const main = async () => {
       })
     }
 
-    if (contentVersion > lastContentVersion) {
-      log("skipping because content is stale", contentVersion, ">", lastContentVersion)
-      skip()
-      return
+    if (ctx.contentVersion > lastContentVersion) {
+      log("skipping because content is stale", ctx.contentVersion, ">", lastContentVersion)
+      return skip()
     }
 
-    log("calling completion event", contentVersion, "<", lastContentVersion)
-    const { lastCharacter, lastLine, templatedContent, contentBefore, contentAfter } = await getContent(contents, request.params.position.line, request.params.position.character)
+    log("calling completion event", ctx.contentVersion, "<", lastContentVersion)
+    const { lastCharacter, lastLine, templatedContent, contentBefore, contentAfter } = await getContent(ctx.contents, request.params.position.line, request.params.position.character)
+    const { triggerCharacters } = ctx.capabilities.completionProvider
 
     if (!triggerCharacters.includes(lastCharacter)) {
       log("skipping", lastCharacter, "not in", triggerCharacters)
-      skip()
-      return
+      return skip()
     }
 
-    const hints = await handlerCompletion({ contentBefore, contentAfter }, language)
+    ctx.sendDiagnostics([
+      {
+        message: "Fetching completion...",
+        severity: Lsp.DiagnosticSeverity.Information,
+        range: {
+          start: { line: request.params.position.line, character: 0 },
+          end: { line: request.params.position.line + 1, character: 0 }
+        }
+      }
+    ], 10000)
+
+    try {
+      var hints = await handlerCompletion({ contentBefore, contentAfter }, ctx.language)
+    } catch (e) {
+      return ctx.sendDiagnostics([
+        {
+          message: e.message,
+          severity: Lsp.DiagnosticSeverity.Error,
+          range: {
+            start: { line: request.params.position.line, character: 0 },
+            end: { line: request.params.position.line + 1, character: 0 }
+          }
+        }
+      ], 5000)
+    }
 
     log("sending completion", JSON.stringify({
       templatedContent, hints
@@ -121,6 +126,8 @@ const main = async () => {
         items
       }
     })
+
+    ctx.resetDiagnostics()
   }
 
   await lsp.start()
@@ -129,5 +136,5 @@ const main = async () => {
 try {
   await main()
 } catch (e) {
-  log("ERROR", e)
+  log("main error", e)
 }
