@@ -44,7 +44,7 @@ const { values } = parseArgs({
     },
     copilotModel: {
       type: 'string',
-      default: Bun.env.COPILOT_MODEL ?? "gpt-4"
+      default: Bun.env.COPILOT_MODEL ?? "gpt-3.5-turbo"
     },
     copilotApiKey: {
       type: 'string',
@@ -52,7 +52,7 @@ const { values } = parseArgs({
     },
     authCopilot: {
       type: 'boolean',
-      default: false  
+      default: false
     }
   },
   strict: true,
