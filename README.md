@@ -28,9 +28,7 @@ wget https://github.com/leona/helix-gpt/releases/download/0.5/helix-gpt-0.5-x86_
 
 #### With Bun
 
-(Must use the args option in the previous step)
-
-```bashal
+```bash
 wget https://github.com/leona/helix-gpt/releases/download/0.5/helix-gpt-0.5.js -O helix-gpt.js
 ```
 
@@ -99,7 +97,7 @@ If there are any issues, refer to the helix-gpt and Helix log files:
 
 ```bash
 tail -f /root/.cache/helix/helix.log
-tail -f /app/helix-gpt.log
+tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 ```
 
 ### Special Thanks
