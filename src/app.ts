@@ -69,7 +69,7 @@ const main = async () => {
     ], 10000)
 
     try {
-      var hints = await handlerCompletion({ contentBefore, contentAfter }, ctx.language)
+      var hints = await handlerCompletion({ contentBefore, contentAfter }, ctx.currentUri, ctx.language)
     } catch (e) {
       return ctx.sendDiagnostics([
         {
