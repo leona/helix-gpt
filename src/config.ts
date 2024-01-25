@@ -1,16 +1,26 @@
 import { parseArgs } from "util"
 import { context } from "./constants"
+import { log } from "./utils"
+import copilotAuth from "./copilot-auth"
 
 const { values } = parseArgs({
   args: Bun.argv,
   options: {
+    logFile: {
+      type: 'string',
+      default: Bun.env.LOG_FILE
+    },
+    handler: {
+      type: 'string',
+      default: Bun.env.HANDLER ?? 'openai'
+    },
     openaiKey: {
       type: 'string',
       default: Bun.env.OPENAI_API_KEY
     },
     openaiContext: {
       type: 'string',
-      default: Bun.env.OPENAI_CONTEXT?.length ? Bun.env.OPENAI_CONTEXT : context
+      default: Bun.env.OPENAI_CONTEXT?.length ? Bun.env.OPENAI_CONTEXT : context.openai
     },
     openaiModel: {
       type: 'string',
@@ -20,21 +30,43 @@ const { values } = parseArgs({
       type: 'string',
       default: Bun.env.OPENAI_MAX_TOKENS ?? "7000"
     },
-    logFile: {
-      type: 'string',
-      default: Bun.env.LOG_FILE
-    },
     openaiEndpoint: {
       type: 'string',
       default: Bun.env.OPENAI_ENDPOINT ?? 'https://api.openai.com/v1/chat/completions'
+    },
+    copilotEndpoint: {
+      type: 'string',
+      default: Bun.env.GITHUB_ENDPOINT ?? 'https://api.githubcopilot.com'
+    },
+    copilotContext: {
+      type: 'string',
+      default: Bun.env.COPILOT_CONTEXT?.length ? Bun.env.COPILOT_CONTEXT : context.copilot
+    },
+    copilotModel: {
+      type: 'string',
+      default: Bun.env.COPILOT_MODEL ?? "gpt-4"
+    },
+    copilotApiKey: {
+      type: 'string',
+      default: Bun.env.COPILOT_API_KEY
+    },
+    authCopilot: {
+      type: 'boolean',
+      default: false  
     }
   },
   strict: true,
   allowPositionals: true,
 });
 
-if (!values.openaiKey?.length) {
-  throw new Error("no openai key provided")
+if (values.authCopilot) {
+  await copilotAuth()
+  process.exit(0)
+}
+
+if (!values.openaiKey?.length && !values.copilotApiKey?.length) {
+  log("no handler key provided")
+  throw new Error("no handler key provided")
 }
 
 export default values

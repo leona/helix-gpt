@@ -1,4 +1,8 @@
-export const context = `Continue the input code from the language <languageId> at the <BEGIN_COMPLETION> marker. Only respond with code.`
+export const context = {
+  openai: `Continue the input code from the language <languageId>. Only respond with code.`,
+  copilot: `<languageId> completions. Only respond with code.`
+}
+
 export const examples = [
   {
     role: "user",

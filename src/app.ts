@@ -1,6 +1,6 @@
 import Lsp from "./lsp"
 import { getContent, log } from "./utils"
-import { getHints } from "./openai"
+import { completion as handlerCompletion } from "./completions"
 
 const main = async () => {
   let contents: string = ""
@@ -29,6 +29,7 @@ const main = async () => {
   lsp.on(Lsp.Event.DidOpen, async ({ request }) => {
     contents = request.params.textDocument.text
     language = request.params.textDocument.languageId
+    contentVersion = 0
   })
 
   lsp.on(Lsp.Event.DidChange, async ({ request }) => {
@@ -67,7 +68,7 @@ const main = async () => {
     }
 
     log("calling completion event", contentVersion, "<", lastContentVersion)
-    const { lastCharacter, lastLine, templatedContent } = await getContent(contents, request.params.position.line, request.params.position.character)
+    const { lastCharacter, lastLine, templatedContent, contentBefore, contentAfter } = await getContent(contents, request.params.position.line, request.params.position.character)
 
     if (!triggerCharacters.includes(lastCharacter)) {
       log("skipping", lastCharacter, "not in", triggerCharacters)
@@ -75,7 +76,7 @@ const main = async () => {
       return
     }
 
-    const hints = await getHints(templatedContent, language)
+    const hints = await handlerCompletion({ contentBefore, contentAfter }, language)
 
     log("sending completion", JSON.stringify({
       templatedContent, hints

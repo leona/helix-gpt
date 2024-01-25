@@ -1,6 +1,6 @@
 # helix-gpt
 
-Code completion LSP for [Helix](https://github.com/helix-editor/helix) utilising the OpenAI chat API.
+Code completion LSP for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
 ![](https://github.com/leona/helix-gpt/raw/master/assets/example.gif)
 
@@ -14,19 +14,22 @@ Code completion LSP for [Helix](https://github.com/helix-editor/helix) utilising
 ### Configuration
 You can configure helix-gpt by exposing either the environment variables below, or passing the command line options directly to helix-gpt in the helix configuration step.
 
+All config options can be found [here](https://github.com/leona/helix-gpt/blob/master/src/config.ts)
+
 Environment vars
 ```bash
-OPENAI_MODEL=gpt-3.5-turbo-16k # Optional
-OPENAI_API_KEY=123 # required
-OPENAI_MAX_TOKENS=7000 # optional
-OPENAI_CONTEXT="A terrible code completion assistant" # Optional
-OPENAI_ENDPOINT=https://api.openai.com/v1/chat/completions # Optional
-LOG_FILE=/app/debug-helix-gpt.log # Optional
+OPENAI_API_KEY=123 # Need at least 1 api key provided
+COPILOT_API_KEY=123
+HANDLER=openai # openai/copilot
 ```
+
+or
 
 Args (add to `command = "helix-gpt"` below)
 
-```--openaiModel gpt-3.5-turbo --openaiKey 123 --logFile /app/debug-helix-gpt.log --openaiContext "A terrible code completion assistant"```
+```--handler openai --openaiKey 123```
+
+You can also use `helix-gpt --authCopilot` to fetch your copilot token.
 
 ### Helix configuration
 
@@ -62,14 +65,13 @@ This was made to run with [Bun](https://bun.sh/), but you can find a binary belo
 
 Without bun
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1-x86_64-linux.tar.gz -O /tmp/helix-gpt.tar.gz && tar -zxvf helix-gpt.tar.gz && mv helix-gpt-0.1-x86_64-linux /usr/bin/helix-gpt && chmod +x /usr/bin/helix-gpt
+wget https://github.com/leona/helix-gpt/releases/download/0.5/helix-gpt-0.5-x86_64-linux.tar.gz -O /tmp/helix-gpt.tar.gz && tar -zxvf helix-gpt.tar.gz && mv helix-gpt-0.5-x86_64-linux /usr/bin/helix-gpt && chmod +x /usr/bin/helix-gpt
 ```
 
 With bun (must use the args option in the previous step)
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.1/helix-gpt-0.1.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/0.5/helix-gpt-0.5.js -O helix-gpt.js
 ```
-
 
 ### All done
 If you are having issues, check both the helix-gpt and helix log files.
@@ -83,7 +85,7 @@ tail -f /app/helix-gpt.log
 [rsc1975](https://github.com/rsc1975/bun-docker) for their bun Dockerfile
 
 ### Todo
-- Copilot support
+- ~~Copilot support~~
 - Self hosted model support
 - inlineCompletionProvider (if/when Helix gets support)
 - Error fixing assistant
