@@ -20,11 +20,11 @@ export const genHexStr = (length: number) => {
 }
 
 export const getContent = async (contents: string, line: number, column: number) => {
-  const lines = contents.split('\n').slice(0, line + 1)
+  const lines = contents?.split('\n').slice(0, line + 1)
   lines[lines.length - 1] = lines[lines.length - 1].split('').slice(0, column).join('')
   const lastLine = lines[lines.length - 1]
   const contentBefore = lines.join('\n')
-  const contentAfter = contents.split('\n').slice(line + 1).join('\n')
+  const contentAfter = contents?.split('\n').slice(line + 1).join('\n')
   const lastCharacter = contentBefore.slice(-1)
   const templatedContent = `${contentBefore}<BEGIN_COMPLETION>\n${contentAfter}`
   return { contentBefore, contentAfter, lastCharacter, templatedContent, lastLine }

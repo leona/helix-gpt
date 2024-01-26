@@ -5,6 +5,9 @@ enum Event {
   DidOpen = "textDocument/didOpen",
   DidChange = "textDocument/didChange",
   Completion = "textDocument/completion",
+  CodeAction = "textDocument/codeAction",
+  ApplyEdit = "workspace/applyEdit",
+  ExecuteCommand = "workspace/executeCommand",
   Initialize = "initialize",
   Shutdown = "shutdown",
   Exit = "exit",
@@ -46,6 +49,7 @@ interface IService {
   receiveLine(line: string): Promise<void>;
   start(): Promise<void>;
   send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }): void;
+  getContentFromRange({ range }: { range: Range }): string;
 }
 
 type EventRequest = {
@@ -59,12 +63,13 @@ class Service {
   currentUri?: string
   contentVersion: number
   language?: string
-  contents?: string
+  contents: string
 
   constructor({ capabilities }) {
     this.emitter = new EventEmitter()
     this.capabilities = capabilities
     this.contentVersion = 0
+    this.contents = ""
     this.registerDefault()
   }
 
@@ -98,6 +103,12 @@ class Service {
 
       ctx.contentVersion = request.params.textDocument.version
     })
+  }
+
+  getContentFromRange(range: Range): string {
+    log("getting content from range", JSON.stringify(range), this.contents)
+    const { start, end } = range
+    return this.contents.split("\n").slice(start.line, end.line + 1).join("\n")
   }
 
   positionalUpdate(text: string, range: Range) {
@@ -190,7 +201,7 @@ class Service {
 
   async receiveLine(line: string) {
     try {
-      const request = JSON.parse(line.split('\r\n')[2])
+      const request = JSON.parse(line.split('\r\n')[2].split('Content-Length')[0])
 
       if (![Event.DidChange, Event.DidOpen].includes(request.method)) {
         log("received request:", JSON.stringify(request))

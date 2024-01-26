@@ -12,7 +12,7 @@ name = "typescript"
 auto-format = true
 indent = { tab-width = 2, unit = " " }
 language-servers = [
-    "ts",
-    "gpt"
+  "ts",
+  "gpt"
 ]
 

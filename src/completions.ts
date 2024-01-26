@@ -4,6 +4,20 @@ import openai from "./openai"
 
 let copilotToken: string
 
+const extractCodeBlock = (text: string, language: string): string => {
+  const pattern = new RegExp(`\`\`\`${language}([\\s\\S]*?)\`\`\``, 'g');
+  let match;
+  const blocks: string[] = [];
+
+  while ((match = pattern.exec(text)) !== null) {
+    blocks.push(match[0]);
+  }
+
+  const result =  blocks[0];
+  const lines = result.split('\n');
+  return lines.slice(3, lines.length - 1).join('\n') + "\n";
+}
+
 export const handlers = {
   openai: async (contents: any, filepath: string, languageId: string, suggestions = 3) => {
     const messages = [
@@ -100,8 +114,10 @@ export const handlers = {
       throw e
     }
   },
-  copilotOld: async (contents: any, language: string, suggestions = 3) => {
-    // Leaving this here. Other copilot handler is how vscode does it.
+}
+
+export const chatHandlers = {
+  copilot: async (request: string, contents: string, filepath: string, language: string) => {
     const parsedToken = parseQueryStringToken(copilotToken)
 
     if (!parsedToken?.exp || parseInt(parsedToken.exp) <= currentUnixTimestamp()) {
@@ -125,24 +141,27 @@ export const handlers = {
 
     const messages = [
       {
-        role: "system",
-        content: config.copilotContext.replace("<languageId>", language) + "\n\n" + `End of file context:\n\n${contents.contentAfter}`
+        "content": `You are an AI programming assistant.\nWhen asked for your name, you must respond with \"GitHub Copilot\".\nFollow the user's requirements carefully & to the letter.\n- Each code block starts with \`\`\` and // FILEPATH.\n- You always answer with ${language} code.\n- When the user asks you to document something, you must answer in the form of a ${language} code block.\nYour expertise is strictly limited to software development topics.\nFor questions not related to software development, simply give a reminder that you are an AI programming assistant.\nKeep your answers short and impersonal.`,
+        "role": "system"
       },
       {
-        role: "user",
-        content: `Start of file context:\n\n${contents.contentBefore}`
+        "content": `I have the following code in the selection:\n\`\`\`${language}\n// FILEPATH: ${filepath.replace('file://', '')}\n${contents}`,
+        "role": "user"
+      },
+      {
+        "content": request,
+        "role": "user"
       }
     ]
 
     const body = {
-      model: config.copilotModel,
-      maxTokens: 8192,
-      maxRequestTokens: 6144,
-      maxResponseTokens: 2048,
-      baseTokensPerMessage: 4,
-      baseTokensPerName: -1,
-      baseTokensPerCompletion: 3,
-      n: suggestions,
+      intent: true,
+      max_tokens: 7909,
+      model: "gpt-3.5-turbo",
+      n: 1,
+      stream: false,
+      temperature: 0.1,
+      top_p: 1,
       messages
     }
 
@@ -161,12 +180,30 @@ export const handlers = {
       "Accept": "*/*",
       "Connection": "close"
     }
+
     try {
-      return await openai.standard(config.copilotEndpoint as string + "/chat/completions", headers, body)
+      const result = await openai.standard(config.copilotEndpoint as string + "/chat/completions", headers, body)
+      log("got copilot chat result:", result)
+      return extractCodeBlock(result, language)
     } catch (e) {
       log("copilot request failed: " + e.message)
       throw e
     }
+  }
+}
+
+export const chat = async (request: string, contents: string, filepath: string, language: string) => {
+  if (!chatHandlers[config.handler]) {
+    log("chat handler does not exist")
+    throw new Error(`chat handler: ${config.handler} does not exist`)
+  }
+
+  try {
+    log("running chat handler:", config.handler)
+    return await chatHandlers[config.handler](request, contents, filepath, language)
+  } catch (e) {
+    log("chat failed", e.message)
+    throw new Error("Chat failed: " + e.message)
   }
 }
 
@@ -177,7 +214,7 @@ export const completion = async (contents: any, language: string, suggestions = 
   }
 
   try {
-    log("running handler:", config.handler)
+    log("running completion handler:", config.handler)
     return uniqueStringArray(await handlers[config.handler](contents, language, suggestions))
   } catch (e) {
     log("completion failed", e.message)

@@ -1,10 +1,15 @@
 import Lsp from "./lsp"
 import { getContent, log, debounce } from "./utils"
-import { completion as completionHandler } from "./completions"
+import { completion as completionHandler, chat as chatHandler } from "./completions"
+import { commands } from "./constants"
 
 const main = async () => {
   const lsp = new Lsp.Service({
     capabilities: {
+      codeActionProvider: true,
+      executeCommandProvider: {
+        commands: commands.map(i => i.key)
+      },
       completionProvider: {
         resolveProvider: false,
         // somebody please tell me how to trigger newlines
@@ -14,6 +19,72 @@ const main = async () => {
         change: 2,
       }
     }
+  })
+
+  lsp.on(Lsp.Event.ExecuteCommand, async ({ ctx, request }) => {
+    const { command } = request.params
+    const { range, query } = request.params.arguments[0]
+
+    ctx.sendDiagnostics([
+      {
+        message: `Executing ${command}...`,
+        range,
+        severity: Lsp.DiagnosticSeverity.Information
+      }
+    ], 10000)
+
+    const content = ctx.getContentFromRange(range)
+
+    try {
+      var result = await chatHandler(query, content, ctx.currentUri as string, ctx.language as string)
+    } catch (e) {
+      log("chat failed", e.message)
+
+      return ctx.sendDiagnostics([{
+        message: e.message,
+        severity: Lsp.DiagnosticSeverity.Error,
+        range
+      }], 10000)
+    }
+
+    log("received chat result:", result)
+
+    ctx.send({
+      method: Lsp.Event.ApplyEdit,
+      id: request.id,
+      params: {
+        label: command,
+        edit: {
+          changes: {
+            [ctx.currentUri as string]: [{
+              range,
+              newText: result
+            }]
+          }
+        }
+      }
+    })
+
+    ctx.resetDiagnostics()
+  })
+
+  lsp.on(Lsp.Event.CodeAction, ({ ctx, request }) => {
+    ctx.send({
+      id: request.id,
+      result: commands.map(i => ({
+        title: i.label,
+        kind: "quickfix",
+        diagnostics: [],
+        command: {
+          title: i.label,
+          command: i.key,
+          arguments: [{
+            range: request.params.range,
+            query: i.query
+          }]
+        }
+      }))
+    })
   })
 
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {

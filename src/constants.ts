@@ -18,3 +18,20 @@ export const examples = [
   }
 ]
 
+export const commands = [
+  {
+    key: "generateDocs",
+    label: "Generate documentation",
+    query: "Add documentation to this code."
+  },
+  {
+    key: "improveCode",
+    label: "Improve code",
+    query: "Improve this code."
+  },
+  {
+    key: "refactorFromComment",
+    label: "Refactor code from a comment",
+    query: "Refactor this code based on the comment."
+  }
+]
