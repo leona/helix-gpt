@@ -9,7 +9,7 @@ const main = async () => {
     capabilities: {
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":"]
+        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", "."]
       },
       textDocumentSync: {
         change: 1,
@@ -27,7 +27,7 @@ const main = async () => {
 
     completionTimeout = setTimeout(() => {
       completion({ ctx, request, lastContentVersion })
-    }, 200)
+    }, 100)
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
@@ -80,7 +80,7 @@ const main = async () => {
             end: { line: request.params.position.line + 1, character: 0 }
           }
         }
-      ], 5000)
+      ], 10000)
     }
 
     log("sending completion", JSON.stringify({

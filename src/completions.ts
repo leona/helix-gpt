@@ -14,7 +14,7 @@ export const request = async (endpoint: string, headers: Record<string, string>,
 
   if (!response.ok) {
     log("completion error", response.status, await response.text())
-    throw new Error("with status code " + response.status)
+    throw new Error("request error with status code " + response.status)
   }
 
   return response
