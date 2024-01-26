@@ -19,8 +19,8 @@ enum DiagnosticSeverity {
 }
 
 type Position = {
-  start: number,
-  end: number
+  line: number,
+  character: number
 }
 
 type Range = {
@@ -81,23 +81,45 @@ class Service {
 
     this.on(Event.DidOpen, ({ ctx, request }) => {
       ctx.currentUri = request.params.textDocument.uri
-    })
-
-    this.on(Event.Shutdown, ({ ctx, request }) => {
-      log("received shutdown request")
-      process.exit(0)
-    })
-
-    this.on(Event.DidOpen, async ({ ctx, request }) => {
       ctx.contents = request.params.textDocument.text
       ctx.language = request.params.textDocument.languageId
       ctx.contentVersion = 0
     })
 
+    this.on(Event.Shutdown, () => {
+      log("received shutdown request")
+      process.exit(0)
+    })
+
     this.on(Event.DidChange, async ({ ctx, request }) => {
-      ctx.contents = request.params.contentChanges[0].text
+      request.params.contentChanges.forEach((change) => {
+        this.positionalUpdate(change.text, change.range)
+      })
+
       ctx.contentVersion = request.params.textDocument.version
     })
+  }
+
+  positionalUpdate(text: string, range: Range) {
+    const lines = this.contents.split("\n")
+    const start = range.start.line
+    const end = range.end.line
+    const startLine = lines[start]
+    const endLine = lines[end]
+    const startLineStart = startLine.substring(0, range.start.character)
+    const endLineEnd = endLine.substring(range.end.character)
+    const newLines = [startLineStart + text + endLineEnd]
+
+    const newContents = lines.reduce((acc, line, index) => {
+      if (index < start || index > end) {
+        acc.push(line)
+      } else if (index === start) {
+        acc.push(newLines[0])
+      }
+      return acc
+    }, [])
+
+    this.contents = newContents.join("\n")
   }
 
   on(event: string, callback: (request: EventRequest) => void) {
