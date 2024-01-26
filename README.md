@@ -10,12 +10,6 @@ Code actions example (space + a)
 
 ![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example2.gif)
 
-## Goals
-
-- **No dependencies**
-- **Straight completion**. No code improvements/explanations.
-- **No key bindings**, just automatic completion suggestions.
-
 ## Usage
 
 ### Install
