@@ -78,10 +78,6 @@ const main = async () => {
       ], 10000)
     }
 
-    log("sending completion", JSON.stringify({
-      templatedContent, hints
-    }))
-
     const items = hints?.map((i) => {
       if (i.startsWith(lastLine.trim())) {
         i = i.slice(lastLine.trim().length)

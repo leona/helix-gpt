@@ -1,49 +1,10 @@
 import { parseQueryStringToken, currentUnixTimestamp, log, genHexStr, uniqueStringArray } from "./utils"
 import config from "./config"
+import openai from "./openai"
 
 let copilotToken: string
 
-export const request = async (endpoint: string, headers: Record<string, string>, body: any) => {
-  log("sending completion request", JSON.stringify(body))
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-  })
-
-  if (!response.ok) {
-    log("completion error", response.status, await response.text())
-    throw new Error("request error with status code " + response.status)
-  }
-
-  return response
-}
-
-export const directRequest = async (endpoint: string, headers: Record<string, string>, body: any) => {
-  const response = await request(endpoint, headers, body)
-  const data = await response.json()
-  return uniqueStringArray(data?.choices?.map(i => i.message?.content))
-}
-
-export const streamRequest = async (endpoint: string, headers: Record<string, string>, body: any) => {
-  const response = await request(endpoint, headers, body)
-  const text = await response.text()
-
-  const data = text.split('\n').map(i => i.slice(5)).map((i) => {
-    try {
-      return JSON.parse(i).choices[0]
-    } catch (e) { return null }
-  }).filter(i => i).reduce(function(r, a) {
-    r[a.index] = r[a.index] || [];
-    r[a.index].push(a);
-    return r;
-  }, Object.create(null))
-
-  return uniqueStringArray(Object.values(data).map((i) => i.map(i => i.text).join('')))
-}
-
-export const completionHandlers = {
+export const handlers = {
   openai: async (contents: any, filepath: string, languageId: string, suggestions = 3) => {
     const messages = [
       {
@@ -55,6 +16,7 @@ export const completionHandlers = {
         content: `Start of file context:\n\n${contents.contentBefore}`
       }
     ]
+
     const body = {
       model: config.openaiModel,
       max_tokens: parseInt(config.openaiMaxTokens as string),
@@ -71,7 +33,7 @@ export const completionHandlers = {
       "Content-Type": "application/json"
     }
 
-    return await directRequest(config.openaiEndpoint as string, headers, body)
+    return await openai.standard(config.openaiEndpoint as string, headers, body)
   },
   copilot: async (contents: any, filepath: string, language: string, suggestions = 3) => {
     const parsedToken = parseQueryStringToken(copilotToken)
@@ -132,7 +94,7 @@ export const completionHandlers = {
     }
 
     try {
-      return await streamRequest("https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions", headers, body)
+      return await openai.stream("https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions", headers, body)
     } catch (e) {
       log("copilot request failed: " + e.message)
       throw e
@@ -200,7 +162,7 @@ export const completionHandlers = {
       "Connection": "close"
     }
     try {
-      return await directRequest(config.copilotEndpoint as string + "/chat/completions", headers, body)
+      return await openai.standard(config.copilotEndpoint as string + "/chat/completions", headers, body)
     } catch (e) {
       log("copilot request failed: " + e.message)
       throw e
@@ -208,15 +170,15 @@ export const completionHandlers = {
   }
 }
 
-export const completion = (contents: any, language: string, suggestions = 3) => {
-  if (!completionHandlers[config.handler]) {
+export const completion = async (contents: any, language: string, suggestions = 3) => {
+  if (!handlers[config.handler]) {
     log("completion handler does not exist")
     throw new Error(`completion handler: ${config.handler} does not exist`)
   }
 
   try {
     log("running handler:", config.handler)
-    return completionHandlers[config.handler](contents, language, suggestions)
+    return uniqueStringArray(await handlers[config.handler](contents, language, suggestions))
   } catch (e) {
     log("completion failed", e.message)
     throw new Error("Completion failed: " + e.message)
