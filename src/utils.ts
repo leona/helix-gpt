@@ -2,6 +2,13 @@ import { appendFileSync } from "node:fs"
 import config from "./config"
 import crypto from "crypto"
 
+const debounces = {}
+
+export const debounce = (key: string, fn: () => void, timeoutMs: number) => {
+  if (debounces[key]) clearTimeout(debounces[key])
+  debounces[key] = setTimeout(fn, timeoutMs)
+}
+
 export const parseQuery = (queryString: string) => {
   const params = new URLSearchParams(queryString);
   return Object.fromEntries(params.entries());

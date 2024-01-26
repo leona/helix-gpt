@@ -1,15 +1,14 @@
 import Lsp from "./lsp"
-import { getContent, log } from "./utils"
-import { completion as handlerCompletion } from "./completions"
+import { getContent, log, debounce } from "./utils"
+import { completion as completionHandler } from "./completions"
 
 const main = async () => {
-  let completionTimeout: NodeJS.Timeout
-
   const lsp = new Lsp.Service({
     capabilities: {
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", "."]
+        // somebody please tell me how to trigger newlines
+        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", ".", "<", "/"]
       },
       textDocumentSync: {
         change: 1,
@@ -18,16 +17,11 @@ const main = async () => {
   })
 
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
-    if (completionTimeout) {
-      clearTimeout(completionTimeout)
-    }
-
     const lastContentVersion = ctx.contentVersion
-    log("processing completion event", lastContentVersion)
 
-    completionTimeout = setTimeout(() => {
+    debounce("completion", () => {
       completion({ ctx, request, lastContentVersion })
-    }, 100)
+    }, 200)
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
@@ -48,7 +42,6 @@ const main = async () => {
       return skip()
     }
 
-    log("calling completion event", ctx.contentVersion, "<", lastContentVersion)
     const { lastCharacter, lastLine, templatedContent, contentBefore, contentAfter } = await getContent(ctx.contents, request.params.position.line, request.params.position.character)
     const { triggerCharacters } = ctx.capabilities.completionProvider
 
@@ -56,6 +49,8 @@ const main = async () => {
       log("skipping", lastCharacter, "not in", triggerCharacters)
       return skip()
     }
+
+    log("calling completion event", ctx.contentVersion, "<", lastContentVersion)
 
     ctx.sendDiagnostics([
       {
@@ -69,7 +64,7 @@ const main = async () => {
     ], 10000)
 
     try {
-      var hints = await handlerCompletion({ contentBefore, contentAfter }, ctx.currentUri, ctx.language)
+      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, ctx.language)
     } catch (e) {
       return ctx.sendDiagnostics([
         {
