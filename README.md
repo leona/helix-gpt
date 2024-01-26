@@ -3,6 +3,8 @@
 Code completion LSP for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
 ![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example.gif)
+SPACE+a code actions
+![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example2.gif)
 
 ## Goals
 
