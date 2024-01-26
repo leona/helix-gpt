@@ -19,17 +19,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.6/helix-gpt-0.6-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.8/helix-gpt-0.8-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.6-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.8-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.6/helix-gpt-0.6.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/0.8/helix-gpt-0.8.js -O helix-gpt.js
 ```
 
 ### Configuration
