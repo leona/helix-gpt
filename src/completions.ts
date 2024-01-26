@@ -4,7 +4,7 @@ import openai from "./openai"
 
 let copilotToken: string
 
-const extractCodeBlock = (text: string, language: string): string => {
+const extractCodeBlock = (filepath: string, text: string, language: string): string => {
   const pattern = new RegExp(`\`\`\`${language}([\\s\\S]*?)\`\`\``, 'g');
   let match;
   const blocks: string[] = [];
@@ -13,9 +13,10 @@ const extractCodeBlock = (text: string, language: string): string => {
     blocks.push(match[0]);
   }
 
-  const result =  blocks[0];
-  const lines = result.split('\n');
-  return lines.slice(3, lines.length - 1).join('\n') + "\n";
+  const result = blocks[0];
+  
+  const lines = result.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '').split('\n');
+  return lines.slice(1, lines.length - 1).join('\n') + "\n";
 }
 
 export const handlers = {
@@ -184,7 +185,7 @@ export const chatHandlers = {
     try {
       const result = await openai.standard(config.copilotEndpoint as string + "/chat/completions", headers, body)
       log("got copilot chat result:", result)
-      return extractCodeBlock(result, language)
+      return extractCodeBlock(filepath, result, language)
     } catch (e) {
       log("copilot request failed: " + e.message)
       throw e
