@@ -12,7 +12,6 @@ const main = async () => {
       },
       completionProvider: {
         resolveProvider: false,
-        // somebody please tell me how to trigger newlines
         triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", ".", "<", "/"]
       },
       textDocumentSync: {
@@ -69,6 +68,8 @@ const main = async () => {
   })
 
   lsp.on(Lsp.Event.CodeAction, ({ ctx, request }) => {
+    ctx.currentUri = request.params.textDocument.uri
+
     ctx.send({
       id: request.id,
       result: commands.map(i => ({
@@ -114,13 +115,6 @@ const main = async () => {
     }
 
     const { lastCharacter, lastLine, templatedContent, contentBefore, contentAfter } = await getContent(ctx.contents, request.params.position.line, request.params.position.character)
-    const { triggerCharacters } = ctx.capabilities.completionProvider
-
-    if (!triggerCharacters.includes(lastCharacter)) {
-      log("skipping", lastCharacter, "not in", triggerCharacters)
-      return skip()
-    }
-
     log("calling completion event", ctx.contentVersion, "<", lastContentVersion)
 
     ctx.sendDiagnostics([

@@ -117,8 +117,8 @@ class Service {
     const end = range.end.line
     const startLine = lines[start]
     const endLine = lines[end]
-    const startLineStart = startLine.substring(0, range.start.character)
-    const endLineEnd = endLine.substring(range.end.character)
+    const startLineStart = startLine?.substring(0, range.start.character)
+    const endLineEnd = endLine?.substring(range.end.character)
     const newLines = [startLineStart + text + endLineEnd]
 
     const newContents = lines.reduce((acc, line, index) => {
