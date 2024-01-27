@@ -101,6 +101,7 @@ class Service {
         this.positionalUpdate(change.text, change.range)
       })
 
+      ctx.currentUri = request.params.textDocument.uri
       ctx.contentVersion = request.params.textDocument.version
     })
   }
