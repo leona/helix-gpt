@@ -10,7 +10,13 @@ Code actions example (space + a)
 
 ![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example2.gif)
 
-## Usage
+### How?
+
+When a trigger character is pressed it will request a completion and use the entire file as context.
+Triggers characters: `["{", "(", ")", "=", ">", " ", ",", ":", ".", "<", "/"]`
+Helix can often trigger a completion without these being pressed though. You can also use `ctrl+x` to manually trigger it.
+
+Code actions are triggered by `space+a` and only use the selected code as context.
 
 ### Install
 
@@ -19,17 +25,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.9/helix-gpt-0.9-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.10/helix-gpt-0.10-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.9-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.10-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.9/helix-gpt-0.9.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/0.10/helix-gpt-0.10.js -O helix-gpt.js
 ```
 
 ### Configuration
