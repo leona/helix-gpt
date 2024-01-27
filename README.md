@@ -1,6 +1,6 @@
 # helix-gpt
 
-Code completion LSP for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
+Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
 Completion example
 
