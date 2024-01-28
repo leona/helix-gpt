@@ -1,6 +1,5 @@
 import { parseArgs } from "util"
 import { context } from "./constants"
-import { log } from "./utils"
 import copilotAuth from "./models/copilot-auth"
 
 const { values } = parseArgs({
@@ -59,7 +58,6 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
-export default values
 
 if (values.authCopilot) {
   await copilotAuth()
@@ -67,7 +65,7 @@ if (values.authCopilot) {
 }
 
 if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length) {
-  log("no handler key provided")
   throw new Error("no handler key provided")
 }
 
+export default values
