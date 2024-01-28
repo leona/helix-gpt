@@ -59,6 +59,8 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
+export default values
+
 if (values.authCopilot) {
   await copilotAuth()
   process.exit(0)
@@ -69,4 +71,3 @@ if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilot
   throw new Error("no handler key provided")
 }
 
-export default values
