@@ -37,6 +37,10 @@ const main = async () => {
 
     try {
       var result = await chatHandler(query, content, ctx.currentUri as string, ctx.language as string)
+
+      if (!result?.length) {
+        throw new Error("No completion found")
+      }
     } catch (e) {
       log("chat failed", e.message)
 

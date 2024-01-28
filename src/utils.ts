@@ -38,7 +38,7 @@ export const log = (...args: any) => {
   } else if (config.logFile?.length) {
     try {
       appendFileSync(config.logFile, xlog(...args) + "\n\n")
-    } catch(e) {}
+    } catch (e) { }
   }
 }
 
@@ -75,7 +75,7 @@ export const currentUnixTimestamp = () => {
   return Math.floor(Date.now() / 1000)
 }
 
-export const extractCodeBlock = (filepath: string, text: string, language: string): string => {
+export const extractCodeBlock = (filepath: string, text: string, language: string): string | undefined => {
   const pattern = new RegExp(`\`\`\`${language}([\\s\\S]*?)\`\`\``, 'g');
   let match;
   const blocks: string[] = [];
@@ -85,8 +85,7 @@ export const extractCodeBlock = (filepath: string, text: string, language: strin
   }
 
   const result = blocks[0];
-
-  const lines = result.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '').split('\n');
-  return lines.slice(1, lines.length - 1).join('\n') + "\n";
+  if (!result?.length) return
+  const lines = result?.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '')?.split('\n');
+  return lines?.slice(1, lines.length - 1)?.join('\n') + "\n";
 }
-

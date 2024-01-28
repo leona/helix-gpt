@@ -103,7 +103,7 @@ export const handlers = {
 }
 
 export const chatHandlers = {
-  copilot: async (request: string, contents: string, filepath: string, language: string) => {
+  copilot: async (request: string, contents: string, filepath: string, language: string): Promise<string | undefined> => {
     const parsedToken = parseQueryStringToken(copilotToken)
 
     if (!parsedToken?.exp || parseInt(parsedToken.exp) <= currentUnixTimestamp()) {
@@ -178,7 +178,7 @@ export const chatHandlers = {
   }
 }
 
-export const chat = async (request: string, contents: string, filepath: string, language: string) => {
+export const chat = async (request: string, contents: string, filepath: string, language: string): Promise<string | undefined> => {
   if (!chatHandlers[config.handler]) {
     log("chat handler does not exist")
     throw new Error(`chat handler: ${config.handler} does not exist`)
