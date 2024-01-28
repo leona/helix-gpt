@@ -12,7 +12,7 @@ const main = async () => {
       },
       completionProvider: {
         resolveProvider: false,
-        triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", ".", "<", "/"]
+        triggerCharacters: ["{", "(", " ", "."]
       },
       textDocumentSync: {
         change: 1,
