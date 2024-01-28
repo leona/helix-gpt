@@ -8,7 +8,7 @@ const { values } = parseArgs({
   options: {
     logFile: {
       type: 'string',
-      default: Bun.env.LOG_FILE
+      default: Bun.env.LOG_FILE ?? ''
     },
     handler: {
       type: 'string',

@@ -35,8 +35,10 @@ export const log = (...args: any) => {
 
   if (Bun.env.TEST_RUNNER) {
     console.log(xlog(...args))
-  } else {
-    appendFileSync(config.logFile, xlog(...args) + "\n\n")
+  } else if (config.logFile?.length) {
+    try {
+      appendFileSync(config.logFile, xlog(...args) + "\n\n")
+    } catch(e) {}
   }
 }
 
