@@ -1,61 +1,7 @@
 import EventEmitter from "node:events"
 import { log } from "./utils"
-
-enum Event {
-  DidOpen = "textDocument/didOpen",
-  DidChange = "textDocument/didChange",
-  Completion = "textDocument/completion",
-  CodeAction = "textDocument/codeAction",
-  ApplyEdit = "workspace/applyEdit",
-  ExecuteCommand = "workspace/executeCommand",
-  Initialize = "initialize",
-  Shutdown = "shutdown",
-  Exit = "exit",
-  PublishDiagnostics = "textDocument/publishDiagnostics",
-}
-
-enum DiagnosticSeverity {
-  Error = 1,
-  Warning = 2,
-  Information = 3,
-  Hint = 4,
-}
-
-type Position = {
-  line: number,
-  character: number
-}
-
-type Range = {
-  start: Position,
-  end: Position
-}
-
-type Diagnostic = {
-  message: string,
-  range: Range,
-  source?: string,
-  severity?: DiagnosticSeverity
-}
-
-interface IService {
-  currentUri?: string
-  contents?: string
-  language?: string,
-  contentVersion?: number
-  capabilities: any
-  sendDiagnostics(diagnostics: Diagnostic[], timeout?: number): void;
-  resetDiagnostics(): void;
-  receiveLine(line: string): Promise<void>;
-  start(): Promise<void>;
-  send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }): void;
-  getContentFromRange({ range }: { range: Range }): string;
-}
-
-type EventRequest = {
-  ctx: IService,
-  request: any
-}
+import type { Range, Diagnostic, EventRequest } from "./lsp.types"
+import { Event, DiagnosticSeverity } from "./lsp.types"
 
 class Service {
   emitter: EventEmitter
@@ -65,7 +11,7 @@ class Service {
   language?: string
   contents: string
 
-  constructor({ capabilities }) {
+  constructor({ capabilities }: any) {
     this.emitter = new EventEmitter()
     this.capabilities = capabilities
     this.contentVersion = 0
@@ -98,6 +44,7 @@ class Service {
     })
 
     this.on(Event.DidChange, async ({ ctx, request }) => {
+      // Removing incremental updates for the moment
       // request.params.contentChanges.forEach((change) => {
       // this.positionalUpdate(change.text, change.range)
       // })
