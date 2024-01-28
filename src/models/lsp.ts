@@ -44,7 +44,6 @@ class Service {
     })
 
     this.on(Event.DidChange, async ({ ctx, request }) => {
-
       const { uri, version } = request.params.textDocument
       this.buffers[uri].version = version
       this.currentUri = uri
