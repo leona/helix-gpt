@@ -195,7 +195,7 @@ export const chat = async (request: string, contents: string, filepath: string, 
   }
 }
 
-export const completion = async (contents: any, language: string, suggestions = 3) => {
+export const completion = async (contents: any, filepath: string, language: string, suggestions = 3) => {
   if (!handlers[config.handler]) {
     log("completion handler does not exist")
     throw new Error(`completion handler: ${config.handler} does not exist`)
@@ -205,7 +205,7 @@ export const completion = async (contents: any, language: string, suggestions = 
 
   try {
     log("running completion handler:", config.handler)
-    return uniqueStringArray(await handlers[config.handler](contents, language, suggestions))
+    return uniqueStringArray(await handlers[config.handler](contents, filepath, language, suggestions))
   } catch (e) {
     log("completion failed", e.message)
     throw new Error("Completion failed: " + e.message)
