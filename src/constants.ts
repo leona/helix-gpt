@@ -33,5 +33,10 @@ export const commands = [
     key: "refactorFromComment",
     label: "Refactor code from a comment",
     query: "Refactor this code based on the comment."
+  },
+  {
+    key: "writeTest",
+    label: "Write a unit test",
+    query: "Write a unit test for this code. Do not include any imports.",
   }
 ]

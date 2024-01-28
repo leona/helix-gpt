@@ -94,7 +94,9 @@ export const handlers = {
     }
 
     try {
-      return await openai.stream("https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions", headers, body)
+      const result = await openai.stream("https://copilot-proxy.githubusercontent.com/v1/engines/copilot-codex/completions", headers, body)
+      log("got copilot completion result", result)
+      return result
     } catch (e) {
       log("copilot request failed: " + e.message)
       throw e
