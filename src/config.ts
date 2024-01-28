@@ -1,7 +1,7 @@
 import { parseArgs } from "util"
 import { context } from "./constants"
 import { log } from "./utils"
-import copilotAuth from "./copilot-auth"
+import copilotAuth from "./models/copilot-auth"
 
 const { values } = parseArgs({
   args: Bun.argv,

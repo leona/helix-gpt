@@ -47,6 +47,7 @@ export interface IService {
   start(): Promise<void>;
   send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }): void;
   getContentFromRange({ range }: { range: Range }): string;
+  on(event: Event, callback: (request: EventRequest) => void): void;
 }
 
 export type EventRequest = {

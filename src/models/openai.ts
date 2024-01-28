@@ -1,4 +1,4 @@
-import { log } from "./utils"
+import { log } from "../utils"
 
 export const request = async (endpoint: string, headers: Record<string, string>, body: any) => {
   log("sending completion request", JSON.stringify(body))

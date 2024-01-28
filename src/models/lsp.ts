@@ -1,6 +1,6 @@
 import EventEmitter from "node:events"
-import { log } from "./utils"
-import type { Range, Diagnostic, EventRequest } from "./lsp.types"
+import { log } from "../utils"
+import type { IService, Range, Diagnostic, EventRequest } from "./lsp.types"
 import { Event, DiagnosticSeverity } from "./lsp.types"
 
 class Service {
@@ -52,6 +52,12 @@ class Service {
       ctx.currentUri = request.params.textDocument.uri
       ctx.contentVersion = request.params.textDocument.version
       log("received didChange", `language: ${ctx.language}`, `contentVersion: ${ctx.contentVersion}`)
+    })
+  }
+
+  registerEventHandlers(handlers: Record<string, (lsp: IService) => void>) {
+    Object.values(handlers).forEach((i: (lsp: IService) => void) => {
+      i(this)
     })
   }
 

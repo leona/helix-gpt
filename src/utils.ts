@@ -26,8 +26,7 @@ export const getContent = async (contents: string, line: number, column: number)
   const contentBefore = lines.join('\n')
   const contentAfter = contents?.split('\n').slice(line + 1).join('\n')
   const lastCharacter = contentBefore.slice(-1)
-  const templatedContent = `${contentBefore}<BEGIN_COMPLETION>\n${contentAfter}`
-  return { contentBefore, contentAfter, lastCharacter, templatedContent, lastLine }
+  return { contentBefore, contentAfter, lastCharacter, lastLine }
 }
 
 export const log = (...args: any) => {

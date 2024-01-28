@@ -1,5 +1,5 @@
-import { extractCodeBlock, parseQueryStringToken, currentUnixTimestamp, log, genHexStr, uniqueStringArray } from "./utils"
-import config from "./config"
+import { extractCodeBlock, parseQueryStringToken, currentUnixTimestamp, log, genHexStr, uniqueStringArray } from "../utils"
+import config from "../config"
 import openai from "./openai"
 
 let copilotToken: string
