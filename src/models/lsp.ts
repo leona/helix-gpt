@@ -63,9 +63,9 @@ class Service {
   }
 
   getContentFromRange(range: Range): string {
-    log("getting content from range", JSON.stringify(range), `uri: ${this.currentUri}`)
+    log("getting content from range", JSON.stringify(range), `uri: ${this.currentUri}`, `current buffers: ${JSON.stringify(Object.keys(this.buffers))}`)
     const { start, end } = range
-    return this.buffers[this.currentUri].text?.split("\n")?.slice(start.line, end.line + 1).join("\n")
+    return this.buffers[this.currentUri]?.text?.split("\n")?.slice(start.line, end.line + 1).join("\n")
   }
 
   positionalUpdate(uri: string, text: string, range: Range) {
@@ -155,9 +155,21 @@ class Service {
     })
   }
 
+  parseLine(line: string) {
+    const components = line.split('\r\n')
+
+    for (const data of components) {
+      try {
+        return JSON.parse(data)
+      } catch (e) { }
+    }
+
+    throw new Error("failed to parse")
+  }
+
   async receiveLine(line: string) {
     try {
-      const request = JSON.parse(line.split('\r\n')[2].split('Content-Length')[0])
+      const request = this.parseLine(line)
 
       if (![Event.DidChange, Event.DidOpen].includes(request.method)) {
         log("received request:", JSON.stringify(request))
@@ -168,6 +180,7 @@ class Service {
       log("failed to parse line:", e.message, line)
     }
   }
+
 
   async start() {
     for await (const chunk of Bun.stdin.stream()) {

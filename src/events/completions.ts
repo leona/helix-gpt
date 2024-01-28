@@ -48,7 +48,7 @@ export const completions = (lsp: IService) => {
     ], 10000)
 
     try {
-      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, buffer.languageId)
+      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
 
     } catch (e) {
       return ctx.sendDiagnostics([
