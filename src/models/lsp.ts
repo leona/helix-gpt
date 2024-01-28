@@ -1,21 +1,18 @@
 import EventEmitter from "node:events"
 import { log } from "../utils"
-import type { IService, Range, Diagnostic, EventRequest } from "./lsp.types"
+import type { Buffer, IService, Range, Diagnostic, EventRequest } from "./lsp.types"
 import { Event, DiagnosticSeverity } from "./lsp.types"
 
 class Service {
   emitter: EventEmitter
   capabilities: any
   currentUri?: string
-  contentVersion: number
-  language?: string
-  contents: string
+  buffers: Record<string, Buffer>
 
   constructor({ capabilities }: any) {
     this.emitter = new EventEmitter()
     this.capabilities = capabilities
-    this.contentVersion = 0
-    this.contents = ""
+    this.buffers = {}
     this.registerDefault()
   }
 
@@ -31,11 +28,14 @@ class Service {
     })
 
     this.on(Event.DidOpen, ({ ctx, request }) => {
-      ctx.currentUri = request.params.textDocument.uri
-      ctx.contents = request.params.textDocument.text
-      ctx.language = request.params.textDocument.languageId
-      ctx.contentVersion = 0
-      log("received didOpen", `language: ${ctx.language}`)
+      const { uri, text, languageId } = request.params.textDocument
+
+      this.buffers[uri] = {
+        uri, text, languageId, version: 0
+      }
+
+      this.currentUri = uri
+      log("received didOpen", `language: ${languageId}`)
     })
 
     this.on(Event.Shutdown, () => {
@@ -44,14 +44,16 @@ class Service {
     })
 
     this.on(Event.DidChange, async ({ ctx, request }) => {
-      // Removing incremental updates for the moment
-      // request.params.contentChanges.forEach((change) => {
-      // this.positionalUpdate(change.text, change.range)
-      // })
-      this.contents = request.params.contentChanges[0].text
-      ctx.currentUri = request.params.textDocument.uri
-      ctx.contentVersion = request.params.textDocument.version
-      log("received didChange", `language: ${ctx.language}`, `contentVersion: ${ctx.contentVersion}`)
+
+      const { uri, version } = request.params.textDocument
+      this.buffers[uri].version = version
+      this.currentUri = uri
+
+      request.params.contentChanges.forEach((change) => {
+        this.positionalUpdate(uri, change.text, change.range)
+      })
+
+      log("received didChange", `language: ${this.buffers[uri].language}`, `contentVersion: ${version}`, `uri: ${uri}`)
     })
   }
 
@@ -62,13 +64,14 @@ class Service {
   }
 
   getContentFromRange(range: Range): string {
-    log("getting content from range", JSON.stringify(range), this.contents)
+    log("getting content from range", JSON.stringify(range), `uri: ${this.currentUri}`)
     const { start, end } = range
-    return this.contents.split("\n").slice(start.line, end.line + 1).join("\n")
+    return this.buffers[this.currentUri].text?.split("\n")?.slice(start.line, end.line + 1).join("\n")
   }
 
-  positionalUpdate(text: string, range: Range) {
-    const lines = this.contents?.split("\n")
+  positionalUpdate(uri: string, text: string, range: Range) {
+    const buffer = this.buffers[uri]
+    const lines = buffer?.text?.split("\n")
     const start = range.start.line
     const end = range.end.line
     const startLine = lines[start]
@@ -86,7 +89,7 @@ class Service {
       return acc
     }, [])
 
-    this.contents = newContents.join("\n")
+    this.buffers[uri].text = newContents.join("\n")
   }
 
   on(event: string, callback: (request: EventRequest) => void) {
@@ -116,7 +119,7 @@ class Service {
     log("sent request", request)
   }
 
-  sendDiagnostics(diagnostics: Diagnostic[], timeout?: number = 0) {
+  sendDiagnostics(diagnostics: Diagnostic[], timeout: number = 0) {
     log("sending diagnostics", JSON.stringify(diagnostics))
 
     const params = {

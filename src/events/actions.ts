@@ -18,9 +18,10 @@ export const actions = (lsp: IService) => {
     ], 10000)
 
     const content = ctx.getContentFromRange(range)
+    const buffer = ctx.buffers[ctx.currentUri]
 
     try {
-      var result = await chatHandler(query, content, ctx.currentUri as string, ctx.language as string)
+      var result = await chatHandler(query, content, ctx.currentUri as string, buffer.languageId as string)
 
       if (!result?.length) {
         throw new Error("No completion found")

@@ -1,3 +1,5 @@
+import EventEmitter from "node:events"
+
 export enum Event {
   DidOpen = "textDocument/didOpen",
   DidChange = "textDocument/didChange",
@@ -36,11 +38,10 @@ export type Diagnostic = {
 }
 
 export interface IService {
+  emitter: EventEmitter
   currentUri?: string
-  contents?: string
-  language?: string,
-  contentVersion?: number
   capabilities: any
+  buffers: Record<string, Buffer>
   sendDiagnostics(diagnostics: Diagnostic[], timeout?: number): void;
   resetDiagnostics(): void;
   receiveLine(line: string): Promise<void>;
@@ -55,4 +56,10 @@ export type EventRequest = {
   request: any
 }
 
+export type Buffer = {
+  text: string,
+  version: number,
+  languageId: string,
+  uri: string,
+}
 

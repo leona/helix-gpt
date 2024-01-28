@@ -14,7 +14,7 @@ const lsp = new Lsp.Service({
       triggerCharacters: ["{", "(", " ", "."]
     },
     textDocumentSync: {
-      change: 1,
+      change: 2,
       openClose: true
     }
   }

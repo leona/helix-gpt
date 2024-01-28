@@ -5,7 +5,7 @@ import { completion as completionHandler } from "../models/completions"
 
 export const completions = (lsp: IService) => {
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
-    const lastContentVersion = ctx.contentVersion
+    const lastContentVersion = ctx.buffers[request.params.textDocument.uri].version
 
     debounce("completion", () => {
       completion({ ctx, request, lastContentVersion })
@@ -25,13 +25,16 @@ export const completions = (lsp: IService) => {
       })
     }
 
-    if (ctx.contentVersion > lastContentVersion) {
-      log("skipping because content is stale", ctx.contentVersion, ">", lastContentVersion)
+    const buffer = ctx.buffers[request.params.textDocument.uri]
+    log("running completion on buffer", JSON.stringify(buffer))
+
+    if (buffer.version > lastContentVersion) {
+      log("skipping because content is stale")
       return skip()
     }
 
-    const { lastLine, contentBefore, contentAfter } = await getContent(ctx.contents, request.params.position.line, request.params.position.character)
-    log("calling completion event", ctx.contentVersion, "<", lastContentVersion)
+    const { lastLine, contentBefore, contentAfter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
+    log("calling completion event")
 
     ctx.sendDiagnostics([
       {
@@ -45,7 +48,8 @@ export const completions = (lsp: IService) => {
     ], 10000)
 
     try {
-      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, ctx.language)
+      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, buffer.languageId)
+
     } catch (e) {
       return ctx.sendDiagnostics([
         {
