@@ -1,0 +1,5 @@
+theme = "tokyonight_storm"
+
+[editor.cursor-shape]
+insert = "bar"
+

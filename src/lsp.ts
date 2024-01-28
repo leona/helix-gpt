@@ -89,6 +89,7 @@ class Service {
       ctx.contents = request.params.textDocument.text
       ctx.language = request.params.textDocument.languageId
       ctx.contentVersion = 0
+      log("received didOpen", `language: ${ctx.language}`)
     })
 
     this.on(Event.Shutdown, () => {
@@ -97,12 +98,13 @@ class Service {
     })
 
     this.on(Event.DidChange, async ({ ctx, request }) => {
-      request.params.contentChanges.forEach((change) => {
-        this.positionalUpdate(change.text, change.range)
-      })
-
+      // request.params.contentChanges.forEach((change) => {
+      // this.positionalUpdate(change.text, change.range)
+      // })
+      this.contents = request.params.contentChanges[0].text
       ctx.currentUri = request.params.textDocument.uri
       ctx.contentVersion = request.params.textDocument.version
+      log("received didChange", `language: ${ctx.language}`, `contentVersion: ${ctx.contentVersion}`)
     })
   }
 
@@ -113,7 +115,7 @@ class Service {
   }
 
   positionalUpdate(text: string, range: Range) {
-    const lines = this.contents.split("\n")
+    const lines = this.contents?.split("\n")
     const start = range.start.line
     const end = range.end.line
     const startLine = lines[start]

@@ -14,7 +14,7 @@ const extractCodeBlock = (filepath: string, text: string, language: string): str
   }
 
   const result = blocks[0];
-  
+
   const lines = result.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '').split('\n');
   return lines.slice(1, lines.length - 1).join('\n') + "\n";
 }
@@ -199,6 +199,8 @@ export const chat = async (request: string, contents: string, filepath: string, 
     throw new Error(`chat handler: ${config.handler} does not exist`)
   }
 
+  language = language ?? "unknown"
+
   try {
     log("running chat handler:", config.handler)
     return await chatHandlers[config.handler](request, contents, filepath, language)
@@ -213,6 +215,8 @@ export const completion = async (contents: any, language: string, suggestions = 
     log("completion handler does not exist")
     throw new Error(`completion handler: ${config.handler} does not exist`)
   }
+
+  language = language ?? "unknown"
 
   try {
     log("running completion handler:", config.handler)

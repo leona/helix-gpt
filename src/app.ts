@@ -15,7 +15,8 @@ const main = async () => {
         triggerCharacters: ["{", "(", ")", "=", ">", " ", ",", ":", ".", "<", "/"]
       },
       textDocumentSync: {
-        change: 2,
+        change: 1,
+        openClose: true
       }
     }
   })
