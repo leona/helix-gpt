@@ -9,7 +9,7 @@ export const completions = (lsp: IService) => {
 
     debounce("completion", () => {
       completion({ ctx, request, lastContentVersion })
-    }, 200)
+    }, 500)
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
