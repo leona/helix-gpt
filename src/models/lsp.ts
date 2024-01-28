@@ -52,7 +52,7 @@ class Service {
         this.positionalUpdate(uri, change.text, change.range)
       })
 
-      log("received didChange", `language: ${this.buffers[uri].language}`, `contentVersion: ${version}`, `uri: ${uri}`)
+      log("received didChange", `language: ${this.buffers[uri].languageId}`, `contentVersion: ${version}`, `uri: ${uri}`)
     })
   }
 
@@ -104,8 +104,6 @@ class Service {
   }
 
   send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }) {
-    if (result === null) return
-
     const request = JSON.stringify({
       jsonrpc: "2.0",
       method,
