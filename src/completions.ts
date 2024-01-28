@@ -1,23 +1,8 @@
-import { parseQueryStringToken, currentUnixTimestamp, log, genHexStr, uniqueStringArray } from "./utils"
+import { extractCodeBlock, parseQueryStringToken, currentUnixTimestamp, log, genHexStr, uniqueStringArray } from "./utils"
 import config from "./config"
 import openai from "./openai"
 
 let copilotToken: string
-
-const extractCodeBlock = (filepath: string, text: string, language: string): string => {
-  const pattern = new RegExp(`\`\`\`${language}([\\s\\S]*?)\`\`\``, 'g');
-  let match;
-  const blocks: string[] = [];
-
-  while ((match = pattern.exec(text)) !== null) {
-    blocks.push(match[0]);
-  }
-
-  const result = blocks[0];
-
-  const lines = result.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '').split('\n');
-  return lines.slice(1, lines.length - 1).join('\n') + "\n";
-}
 
 export const handlers = {
   openai: async (contents: any, filepath: string, languageId: string, suggestions = 3) => {

@@ -72,3 +72,19 @@ export const parseQueryStringToken = (input: string): Record<string, string> => 
 export const currentUnixTimestamp = () => {
   return Math.floor(Date.now() / 1000)
 }
+
+export const extractCodeBlock = (filepath: string, text: string, language: string): string => {
+  const pattern = new RegExp(`\`\`\`${language}([\\s\\S]*?)\`\`\``, 'g');
+  let match;
+  const blocks: string[] = [];
+
+  while ((match = pattern.exec(text)) !== null) {
+    blocks.push(match[0]);
+  }
+
+  const result = blocks[0];
+
+  const lines = result.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '').split('\n');
+  return lines.slice(1, lines.length - 1).join('\n') + "\n";
+}
+
