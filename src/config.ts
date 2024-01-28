@@ -64,7 +64,7 @@ if (values.authCopilot) {
   process.exit(0)
 }
 
-if (!values.openaiKey?.length && !values.copilotApiKey?.length) {
+if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length) {
   log("no handler key provided")
   throw new Error("no handler key provided")
 }
