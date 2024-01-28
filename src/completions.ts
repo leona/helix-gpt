@@ -54,7 +54,7 @@ export const handlers = {
 
       const { token } = await response.json()
       copilotToken = token
-      log("updated token", token)
+      log("updated token")
     }
 
     const headers = {
@@ -122,7 +122,7 @@ export const chatHandlers = {
 
       const { token } = await response.json()
       copilotToken = token
-      log("updated token", token)
+      log("updated token")
     }
 
     const messages = [
