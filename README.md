@@ -14,7 +14,7 @@ Code actions example (space + a)
 
 When a trigger character is pressed it will request a completion and use the entire file as context.
 Triggers characters: `["{", "(", " ", "."]`
-Helix can often trigger a completion without these being pressed though. You can also use `ctrl+x` to manually trigger it.
+You can also use `ctrl+x` to manually trigger it.
 
 Code actions are triggered by `space+a` and only use the selected code as context.
 
