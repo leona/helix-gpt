@@ -1,6 +1,7 @@
 import Lsp from "./models/lsp"
 import { commands } from "./constants"
 import * as handlers from "./events"
+import { log } from "./utils"
 
 const lsp = new Lsp.Service({
   capabilities: {
@@ -20,4 +21,9 @@ const lsp = new Lsp.Service({
 })
 
 lsp.registerEventHandlers(handlers)
-await lsp.start()
+
+try {
+  await lsp.start()
+} catch (e) {
+  log("lsp-service error", e.message)
+}

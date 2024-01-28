@@ -2,7 +2,7 @@ import { appendFileSync } from "node:fs"
 import config from "./config"
 import crypto from "crypto"
 
-const debounces = {}
+const debounces: Record<string, NodeJS.Timeout> = {}
 
 export const debounce = (key: string, fn: () => void, timeoutMs: number) => {
   if (debounces[key]) clearTimeout(debounces[key])
