@@ -1,12 +1,5 @@
 name: Release
 on:
-  # push:
-  #   tags:
-  #   - '[0-9]+.[0-9]+'
-  #   - '[0-9]+.[0-9]+.[0-9]+'
-  # pull_request:
-  #   paths:
-  #   - '.github/workflows/release.yml'
   workflow_dispatch:
     inputs:
       tag:
@@ -28,6 +21,10 @@ jobs:
         run: |
           git config --global user.name "Leon"
           git config --global user.email "leon@nx.ie"
+          sed -e 's/<release-version>/${{ github.event.inputs.tag }}/g' assets/template.yml > README.md
+          git add README.md
+          git commit -m 'release: version ${{ github.event.inputs.tag }}'
+          git push origin master
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
           git tag -m "$messages" -a ${{ github.event.inputs.tag }}
