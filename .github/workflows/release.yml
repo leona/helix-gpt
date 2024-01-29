@@ -36,7 +36,7 @@ jobs:
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
           git tag -m "$messages" -a ${{ github.event.inputs.tag }}
-          # git push origin ${{  github.event.inputs.tag }}      
+          git push origin ${{  github.event.inputs.tag }}      
 
       - uses: oven-sh/setup-bun@v1
         with:
