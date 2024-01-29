@@ -49,7 +49,7 @@ export default class ApiBase {
   async request(request: Request): Promise<any> {
     const { endpoint, method, body, headers, params, url, timeout } = request;
     let requestUrl = new URL(endpoint, url || this.url);
-    // log("fetch", endpoint)
+    log("fetch", endpoint)
 
     if (params) {
       Object.keys(params).forEach((key) =>
@@ -83,7 +83,7 @@ export default class ApiBase {
       );
     }
 
-    // log("response", requestUrl, response.status)
+    log("response", requestUrl, response.status)
 
     if (request.text) {
       return await response.text();

@@ -1,6 +1,5 @@
 import { parseArgs } from "util"
 import { context } from "./constants"
-import copilotAuth from "./models/copilot-auth"
 
 const { values } = parseArgs({
   args: Bun.argv,
@@ -57,12 +56,6 @@ const { values } = parseArgs({
   strict: true,
   allowPositionals: true,
 });
-
-
-if (values.authCopilot) {
-  await copilotAuth()
-  process.exit(0)
-}
 
 if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length) {
   throw new Error("no handler key provided")
