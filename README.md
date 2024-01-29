@@ -32,7 +32,7 @@ wget https://github.com/leona/helix-gpt/releases/download/0.16/helix-gpt-0.16-x8
 && chmod +x /usr/bin/helix-gpt
 ```
 
-#### With Bun
+#### With Bun (tested with 1.0.25)
 
 ```bash
 wget https://github.com/leona/helix-gpt/releases/download/0.16/helix-gpt-0.16.js -O helix-gpt.js
