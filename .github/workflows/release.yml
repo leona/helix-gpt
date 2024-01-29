@@ -108,6 +108,7 @@ jobs:
           file: dist/*
           file_glob: true
           tag: ${{ github.event.inputs.tag }}
+          release_name: "${{ github.event.inputs.tag }}"
           overwrite: true
       
       - name: Upload binaries as artifact
