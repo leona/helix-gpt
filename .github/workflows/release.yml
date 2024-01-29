@@ -26,6 +26,8 @@ jobs:
       - name: Tag release
         shell: bash
         run: |
+          git config --global user.name "Leon"
+          git config --global user.email "leon@nx.ie"
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
           git tag -m "$messages" -a ${{ github.event.inputs.tag }}
