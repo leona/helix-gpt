@@ -31,12 +31,8 @@ jobs:
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
           git tag -m "$messages" -a ${{ github.event.inputs.tag }}
-          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin ${{  github.event.inputs.tag }} 
+          git push origin ${{ github.event.inputs.tag }} 
 
-      - name: exit
-        shell: bash
-        run: |
-          exit 1
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -56,12 +52,7 @@ jobs:
       - name: Set release
         shell: bash
         run: |
-          name=dev
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            name=${GITHUB_REF:10}
-          fi
-
-          export VERSION="$name"
+          export VERSION="${{ github.event.input.tag }}"
           export ARCH=x86_64-linux
           export APP=helix-gpt
           export OUTPUT="$APP-$VERSION-$ARCH"
