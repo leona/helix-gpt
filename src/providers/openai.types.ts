@@ -1,13 +1,13 @@
-import { extractCodeBlock } from "../utils"
+import { uniqueStringArray, extractCodeBlock, log } from "../utils"
 
 export class Completion extends Array<string> {
   constructor(...items: string[]) {
     super();
-    this.push(...items);
+    this.push(...uniqueStringArray(items));
   }
 
   static fromResponse(data: any): Completion {
-    const choices = data?.choices?.map(i => i.text)
+    const choices = data?.choices?.map(i => i.message.content)
     return new Completion(...choices)
   }
 }
@@ -22,7 +22,7 @@ export class Chat {
 
   static fromResponse(data: any, filepath: string, language: string): Chat {
     const choices = data?.choices?.map(i => i.message?.content)
-    const result = extractCodeBlock(filepath, choices, language)
+    const result = extractCodeBlock(filepath, choices[0], language)
     return new Chat(result as string)
   }
 }

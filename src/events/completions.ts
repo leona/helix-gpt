@@ -49,7 +49,6 @@ export const completions = (lsp: IService) => {
 
     try {
       var hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
-
     } catch (e) {
       return ctx.sendDiagnostics([
         {
@@ -62,6 +61,8 @@ export const completions = (lsp: IService) => {
         }
       ], 10000)
     }
+
+    log("completion hints:", hints)
 
     const items = hints?.map((i) => {
       if (i.startsWith(lastLine.trim())) {

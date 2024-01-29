@@ -8,6 +8,7 @@ interface Request {
   params?: Record<string, string>;
   url?: string;
   text?: boolean;
+  timeout?: number
 }
 
 interface ApiBaseOptions {
@@ -46,7 +47,7 @@ export default class ApiBase {
   }
 
   async request(request: Request): Promise<any> {
-    const { endpoint, method, body, headers, params, url } = request;
+    const { endpoint, method, body, headers, params, url, timeout } = request;
     let requestUrl = new URL(endpoint, url || this.url);
     log("fetch", endpoint)
 
@@ -73,7 +74,7 @@ export default class ApiBase {
       opts.body = JSON.stringify(body);
     }
 
-    const response = await this.fetch(requestUrl.toString(), opts);
+    const response = await this.fetch(requestUrl.toString(), opts, timeout);
 
     if (!response.ok) {
       let error = await response.text();
@@ -81,6 +82,8 @@ export default class ApiBase {
         `Fetch failed with status ${response.status} body ${error} url: ${request.endpoint}`
       );
     }
+
+    log("response", requestUrl, response.status)
 
     if (request.text) {
       return await response.text();

@@ -1,6 +1,7 @@
 import ApiBase from "../models/api"
 import * as types from "./openai.types"
 import config from "../config"
+import { log } from "../utils"
 
 export default class Github extends ApiBase {
 
@@ -21,7 +22,7 @@ export default class Github extends ApiBase {
         "role": "system"
       },
       {
-        "content": `I have the following code in the selection:\n\`\`\`${language}\n// FILEPATH: ${filepath.replace('file://', '')}\n${contents}`,
+        "content": `I have the following code in the selection:\n\`\`\`${languageId}\n// FILEPATH: ${filepath.replace('file://', '')}\n${contents}`,
         "role": "user"
       },
       {
@@ -31,9 +32,8 @@ export default class Github extends ApiBase {
     ]
 
     const body = {
-      intent: true,
       max_tokens: 7909,
-      model: "gpt-4-turbo",
+      model: "gpt-4",
       n: 1,
       stream: false,
       temperature: 0.1,
@@ -44,7 +44,8 @@ export default class Github extends ApiBase {
     const data = await this.request({
       method: "POST",
       body,
-      endpoint: "/chat/completions"
+      endpoint: "/v1/chat/completions",
+      timeout: 10000
     })
 
     return types.Chat.fromResponse(data, filepath, languageId)
@@ -76,7 +77,7 @@ export default class Github extends ApiBase {
     const data = await this.request({
       method: "POST",
       body,
-      endpoint: "/chat/completions"
+      endpoint: "/v1/chat/completions"
     })
 
     return types.Completion.fromResponse(data)

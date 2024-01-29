@@ -1,4 +1,4 @@
-import { parseQueryStringToken, extractCodeBlock } from "../utils"
+import { uniqueStringArray, parseQueryStringToken, log, extractCodeBlock } from "../utils"
 
 export class DeviceCode {
   deviceCode: string;
@@ -62,7 +62,7 @@ export class CopilotSession {
 export class Completion extends Array<string> {
   constructor(...items: string[]) {
     super();
-    this.push(...items);
+    this.push(...uniqueStringArray(items));
   }
 
   static fromResponse(text: string): Completion {
@@ -91,7 +91,7 @@ export class Chat {
 
   static fromResponse(data: any, filepath: string, language: string): Chat {
     const choices = data?.choices?.map(i => i.message?.content)
-    const result = extractCodeBlock(filepath, choices, language)
+    const result = extractCodeBlock(filepath, choices[0], language)
     return new Chat(result as string)
   }
 }

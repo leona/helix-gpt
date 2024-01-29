@@ -22,10 +22,12 @@ const getProvider = (key: string): Provider => {
   return providers[config.handler]
 }
 const chat = async (...args: any[]) => {
+  log(config.handler, "chat request")
   return getProvider(config.handler).chat(...args)
 }
 
 const completion = async (...args: any[]) => {
+  log(config.handler, "completion request")
   return getProvider(config.handler).completion(...args)
 }
 
