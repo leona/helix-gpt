@@ -1,4 +1,4 @@
-import { uniqueStringArray, parseQueryStringToken, log, extractCodeBlock } from "../utils"
+import { uniqueStringArray, parseQuery, parseQueryStringToken, log, extractCodeBlock } from "../utils"
 
 export class DeviceCode {
   deviceCode: string;
@@ -94,9 +94,4 @@ export class Chat {
     const result = extractCodeBlock(filepath, choices[0], language)
     return new Chat(result as string)
   }
-}
-
-const parseQuery = (queryString: string) => {
-  const params = new URLSearchParams(queryString);
-  return Object.fromEntries(params.entries());
 }

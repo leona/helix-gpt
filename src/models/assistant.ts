@@ -21,6 +21,7 @@ const getProvider = (key: string): Provider => {
 
   return providers[config.handler]
 }
+
 const chat = async (...args: any[]) => {
   log(config.handler, "chat request")
   return getProvider(config.handler).chat(...args)
