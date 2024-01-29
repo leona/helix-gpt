@@ -52,7 +52,7 @@ jobs:
       - name: Set release
         shell: bash
         run: |
-          export VERSION="${{ github.event.input.tag }}"
+          export VERSION="${{ github.event.inputs.tag }}"
           export ARCH=x86_64-linux
           export APP=helix-gpt
           export OUTPUT="$APP-$VERSION-$ARCH"
@@ -97,7 +97,7 @@ jobs:
             tar -C `dirname $bin` -czvf dist/$filename.tar.gz --transform 's,^.*/,,g' `basename $bin`
           done
 
-          tar -czvf dist/helix-gpt-${{ github.event.input.tag }}-source.tar.gz -C $source .
+          tar -czvf dist/helix-gpt-${{ github.event.inputs.tag }}-source.tar.gz -C $source .
           mv dist $source/
           
       - name: Upload binaries to release
@@ -107,7 +107,7 @@ jobs:
           repo_token: ${{ secrets.GH_TOKEN }}
           file: dist/*
           file_glob: true
-          tag: ${{ github.event.input.tag }}
+          tag: ${{ github.event.inputs.tag }}
           overwrite: true
       
       - name: Upload binaries as artifact
