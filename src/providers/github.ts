@@ -83,7 +83,7 @@ export default class Github extends ApiBase {
     const body = {
       intent: true,
       max_tokens: 7909,
-      model: "gpt-4-turbo",
+      model: "gpt-4",
       n: 1,
       stream: false,
       temperature: 0.1,
