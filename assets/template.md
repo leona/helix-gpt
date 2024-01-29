@@ -1,5 +1,8 @@
 # helix-gpt
 
+![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
+![Github Release](https://img.shields.io/badge/release-v<release-version>-blue)
+
 Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
 Completion example
