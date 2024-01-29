@@ -26,7 +26,7 @@ jobs:
 
       - name: Setup SSH
         run: |
-          git config --global credential.helper '!f() { sleep 1; echo "username=git token=${{ secrets.GH_TOKEN }}"; }; f'
+          git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/leona/helix-gpt.git
 
       - name: Tag release
         shell: bash
@@ -36,8 +36,13 @@ jobs:
           latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
           git tag -m "$messages" -a ${{ github.event.inputs.tag }}
-          git push origin ${{  github.event.inputs.tag }}      
+          GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git push origin ${{  github.event.inputs.tag }}      
+          rm -Rf .git
 
+      - name: exit
+        shell: bash
+        run: |
+          exit 1
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
