@@ -21,7 +21,7 @@ jobs:
         run: |
           git config --global user.name "Leon"
           git config --global user.email "leon@nx.ie"
-          sed -e 's/<release-version>/${{ github.event.inputs.tag }}/g' assets/template.yml > README.md
+          sed -e 's/<release-version>/${{ github.event.inputs.tag }}/g' assets/template.md > README.md
           git add README.md
           git commit -m 'release: version ${{ github.event.inputs.tag }}'
           git push origin master
