@@ -45,12 +45,12 @@ class Service {
 
     this.on(Event.DidChange, async ({ ctx, request }) => {
       const { uri, version } = request.params.textDocument
-      this.buffers[uri].version = version
+      this.buffers[uri] = { ...this.buffers[uri], version, text: request.params.contentChanges[0].text }
       this.currentUri = uri
 
-      request.params.contentChanges.forEach((change) => {
-        this.positionalUpdate(uri, change.text, change.range)
-      })
+      // request.params.contentChanges.forEach((change) => {
+      //   this.positionalUpdate(uri, change.text, change.range)
+      // })
 
       log("received didChange", `language: ${this.buffers[uri].languageId}`, `contentVersion: ${version}`, `uri: ${uri}`)
     })

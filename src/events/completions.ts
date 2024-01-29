@@ -1,7 +1,7 @@
 import Lsp from "../models/lsp"
 import type { IService } from "../models/lsp.types"
 import { debounce, log, getContent } from "../utils"
-import { completion as completionHandler } from "../models/completions"
+import assistant from "../models/assistant"
 
 export const completions = (lsp: IService) => {
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
@@ -48,7 +48,7 @@ export const completions = (lsp: IService) => {
     ], 10000)
 
     try {
-      var hints = await completionHandler({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
+      var hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
 
     } catch (e) {
       return ctx.sendDiagnostics([

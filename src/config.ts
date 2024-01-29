@@ -31,7 +31,7 @@ const { values } = parseArgs({
     },
     openaiEndpoint: {
       type: 'string',
-      default: Bun.env.OPENAI_ENDPOINT ?? 'https://api.openai.com/v1/chat/completions'
+      default: Bun.env.OPENAI_ENDPOINT ?? 'https://api.openai.com/v1'
     },
     copilotEndpoint: {
       type: 'string',

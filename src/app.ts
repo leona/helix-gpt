@@ -2,6 +2,12 @@ import Lsp from "./models/lsp"
 import { commands } from "./constants"
 import * as handlers from "./events"
 import { log } from "./utils"
+import assistant from "./models/assistant"
+import Github from "./providers/github"
+import Openai from "./providers/openai"
+
+assistant.registerProvider("copilot", new Github())
+assistant.registerProvider("openai", new Openai())
 
 const lsp = new Lsp.Service({
   capabilities: {
@@ -14,7 +20,7 @@ const lsp = new Lsp.Service({
       triggerCharacters: ["{", "(", " ", "."]
     },
     textDocumentSync: {
-      change: 2,
+      change: 1,
       openClose: true
     }
   }

@@ -1,7 +1,7 @@
 import Lsp from "../models/lsp"
 import type { IService } from "../models/lsp.types"
 import { commands } from "../constants"
-import { chat as chatHandler } from "../models/completions"
+import assistant from "../models/assistant"
 import { log } from "../utils"
 
 export const actions = (lsp: IService) => {
@@ -21,7 +21,7 @@ export const actions = (lsp: IService) => {
     const buffer = ctx.buffers[ctx.currentUri]
 
     try {
-      var result = await chatHandler(query, content, ctx.currentUri as string, buffer?.languageId as string)
+      var result = await assistant.chat(query, content, ctx.currentUri as string, buffer?.languageId as string)
 
       if (!result?.length) {
         throw new Error("No completion found")
