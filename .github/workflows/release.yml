@@ -20,7 +20,9 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-
+        with:
+          fetch-tags: true
+          fetch-depth: 0
       - name: Tag release
         shell: bash
         run: |
