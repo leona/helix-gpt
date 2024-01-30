@@ -13,6 +13,8 @@ Code actions example (space + a)
 
 ![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example2.gif)
 
+Available code actions: `resolveDiagnostics` `generateDocs` `improveCode` `refactorFromComment` `writeTest`
+
 ### How?
 
 When a trigger character is pressed it will request a completion and use the entire file as context.
