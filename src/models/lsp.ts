@@ -10,7 +10,7 @@ export class Service {
   buffers: Record<string, Buffer>
 
   constructor({ capabilities }: any) {
-    this.emitter = new EventEmitter()
+    this.emitter = new EventEmitter({ captureRejections: true })
     this.capabilities = capabilities
     this.buffers = {}
     log("triggerCharacters:", JSON.stringify(capabilities?.completionProvider?.triggerCharacters))
@@ -18,6 +18,10 @@ export class Service {
   }
 
   registerDefault() {
+    this.emitter.on("error", (e) => {
+      log("lsp-event-emitter error", e.message)
+    })
+
     this.on(Event.Initialize, async ({ ctx }) => {
       ctx.send({
         method: Event.Initialize,
@@ -107,12 +111,10 @@ export class Service {
     this.buffers[uri].text = newContents.join("\n")
   }
 
-  on(event: string, callback: (request: EventRequest) => void) {
-    const parent = this
-
+  on(event: string, callback: (request: EventRequest) => Promise<void> | undefined) {
     this.emitter.on(event, async (request) => {
       try {
-        callback({ ctx: parent, request })
+        await callback({ ctx: this, request })
       } catch (e) {
         log("error in event", JSON.stringify(request), e.message)
       }

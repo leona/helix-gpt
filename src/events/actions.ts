@@ -1,5 +1,5 @@
 import { Service } from "../models/lsp"
-import { Event } from "../models/lsp.types"
+import { Event, DiagnosticSeverity } from "../models/lsp.types"
 import { commands } from "../constants"
 import assistant from "../models/assistant"
 import { log } from "../utils"
@@ -13,7 +13,7 @@ export const actions = (lsp: Service) => {
       {
         message: `Executing ${command}...`,
         range,
-        severity: Lsp.DiagnosticSeverity.Information
+        severity: DiagnosticSeverity.Information
       }
     ], 10000)
 
@@ -33,7 +33,7 @@ export const actions = (lsp: Service) => {
 
       return ctx.sendDiagnostics([{
         message: e.message,
-        severity: Lsp.DiagnosticSeverity.Error,
+        severity: DiagnosticSeverity.Error,
         range
       }], 10000)
     }

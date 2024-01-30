@@ -19,8 +19,22 @@ export const completions = (lsp: Service) => {
       })
     }
 
-    debounce("completion", () => {
-      completion({ ctx, request, lastContentVersion })
+    debounce("completion", async () => {
+      try {
+        await completion({ ctx, request, lastContentVersion })
+      } catch (e) {
+        log("error in completion event", e.message)
+        ctx.sendDiagnostics([
+          {
+            message: e.message,
+            severity: DiagnosticSeverity.Error,
+            range: {
+              start: { line: request.params.position.line, character: 0 },
+              end: { line: request.params.position.line + 1, character: 0 }
+            }
+          }
+        ], 10000)
+      }
     }, 500)
   })
 
