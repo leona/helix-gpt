@@ -1,4 +1,5 @@
 import EventEmitter from "node:events"
+import { Service } from "./lsp"
 
 export enum Event {
   DidOpen = "textDocument/didOpen",
@@ -37,25 +38,9 @@ export type Diagnostic = {
   severity?: DiagnosticSeverity
 }
 
-export interface IService {
-  emitter: EventEmitter
-  currentUri?: string
-  capabilities: any
-  buffers: Record<string, Buffer>
-  sendDiagnostics(diagnostics: Diagnostic[], timeout?: number): void;
-  resetDiagnostics(): void;
-  receiveLine(line: string): Promise<void>;
-  start(): Promise<void>;
-  send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }): void;
-  getContentFromRange({ range }: { range: Range }): string;
-  getContentPadding(text: string): number;
-  padContent(text: string, padding: number): string;
-  on(event: Event, callback: (request: EventRequest) => void): void;
-}
-
 export type EventRequest = {
-  ctx: IService,
-  request: any
+  ctx: Service
+  request: any,
 }
 
 export type Buffer = {

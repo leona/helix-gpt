@@ -1,10 +1,10 @@
-import Lsp from "../models/lsp"
-import type { IService } from "../models/lsp.types"
+import { Service } from "../models/lsp"
+import { Event, DiagnosticSeverity } from "../models/lsp.types"
 import { debounce, log, getContent } from "../utils"
 import assistant from "../models/assistant"
 
-export const completions = (lsp: IService) => {
-  lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
+export const completions = (lsp: Service) => {
+  lsp.on(Event.Completion, async ({ ctx, request }) => {
     const buffer = ctx.buffers[request.params.textDocument.uri]
     const lastContentVersion = buffer.version
     const { lastCharacter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
@@ -51,7 +51,7 @@ export const completions = (lsp: IService) => {
     ctx.sendDiagnostics([
       {
         message: "Fetching completion...",
-        severity: Lsp.DiagnosticSeverity.Information,
+        severity: DiagnosticSeverity.Information,
         range: {
           start: { line: request.params.position.line, character: 0 },
           end: { line: request.params.position.line + 1, character: 0 }
@@ -65,7 +65,7 @@ export const completions = (lsp: IService) => {
       return ctx.sendDiagnostics([
         {
           message: e.message,
-          severity: Lsp.DiagnosticSeverity.Error,
+          severity: DiagnosticSeverity.Error,
           range: {
             start: { line: request.params.position.line, character: 0 },
             end: { line: request.params.position.line + 1, character: 0 }

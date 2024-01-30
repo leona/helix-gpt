@@ -1,11 +1,11 @@
-import Lsp from "../models/lsp"
-import type { IService } from "../models/lsp.types"
+import { Service } from "../models/lsp"
+import { Event } from "../models/lsp.types"
 import { commands } from "../constants"
 import assistant from "../models/assistant"
 import { log } from "../utils"
 
-export const actions = (lsp: IService) => {
-  lsp.on(Lsp.Event.ExecuteCommand, async ({ ctx, request }) => {
+export const actions = (lsp: Service) => {
+  lsp.on(Event.ExecuteCommand, async ({ ctx, request }) => {
     const { command } = request.params
     const { range, query } = request.params.arguments[0]
 
@@ -42,7 +42,7 @@ export const actions = (lsp: IService) => {
     log("received chat result:", result)
 
     ctx.send({
-      method: Lsp.Event.ApplyEdit,
+      method: Event.ApplyEdit,
       id: request.id,
       params: {
         label: command,
@@ -60,7 +60,7 @@ export const actions = (lsp: IService) => {
     ctx.resetDiagnostics()
   })
 
-  lsp.on(Lsp.Event.CodeAction, ({ ctx, request }) => {
+  lsp.on(Event.CodeAction, ({ ctx, request }) => {
     ctx.currentUri = request.params.textDocument.uri
 
     ctx.send({

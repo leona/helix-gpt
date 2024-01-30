@@ -1,9 +1,9 @@
 import EventEmitter from "node:events"
 import { log } from "../utils"
-import type { Buffer, IService, Range, Diagnostic, EventRequest } from "./lsp.types"
+import type { Buffer, Range, Diagnostic, EventRequest } from "./lsp.types"
 import { Event, DiagnosticSeverity } from "./lsp.types"
 
-class Service {
+export class Service {
   emitter: EventEmitter
   capabilities: any
   currentUri?: string
@@ -72,8 +72,8 @@ class Service {
     }).join("\n")
   }
 
-  registerEventHandlers(handlers: Record<string, (lsp: IService) => void>) {
-    Object.values(handlers).forEach((i: (lsp: IService) => void) => {
+  registerEventHandlers(handlers: Record<string, (lsp: Service) => void>) {
+    Object.values(handlers).forEach((i: (lsp: Service) => void) => {
       i(this)
     })
   }
