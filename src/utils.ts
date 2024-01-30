@@ -1,6 +1,7 @@
 import { appendFileSync } from "node:fs"
 import config from "./config"
 import crypto from "crypto"
+import fs from "fs"
 
 const debounces: Record<string, NodeJS.Timeout> = {}
 
@@ -29,14 +30,18 @@ export const getContent = async (contents: string, line: number, column: number)
   return { contentBefore, contentAfter, lastCharacter, lastLine }
 }
 
+let logStream: fs.WriteStream | undefined
+
 export const log = (...args: any) => {
   if (!config.logFile) return
 
   if (Bun.env.TEST_RUNNER) {
     console.log(xlog(...args))
   } else if (config.logFile?.length) {
+    if (!logStream) logStream = fs.createWriteStream(config.logFile)
+
     try {
-      appendFileSync(config.logFile, xlog(...args) + "\n\n")
+      logStream.write(xlog(...args) + "\n\n")
     } catch (e) { }
   }
 }
