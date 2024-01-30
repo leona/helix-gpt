@@ -13,7 +13,7 @@ class Service {
     this.emitter = new EventEmitter()
     this.capabilities = capabilities
     this.buffers = {}
-    log("triggerCharacters:", JSON.stringify(capabilities.completionProvider.triggerCharacters))
+    log("triggerCharacters:", JSON.stringify(capabilities?.completionProvider?.triggerCharacters))
     this.registerDefault()
   }
 
