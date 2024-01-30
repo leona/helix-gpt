@@ -92,3 +92,11 @@ export const extractCodeBlock = (filepath: string, text: string, language: strin
   const lines = result?.replace(`// FILEPATH: ${filepath.replace('file://', '')}\n`, '')?.split('\n');
   return lines?.slice(1, lines.length - 1)?.join('\n') + "\n";
 }
+
+export const bytesToString = (bytes: number): string => {
+  if (bytes < 1024) return bytes + " B"
+  else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB"
+  else if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + " MB"
+  else return (bytes / 1024 / 1024 / 1024).toFixed(2) + " GB"
+}
+
