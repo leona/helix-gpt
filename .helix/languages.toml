@@ -1,6 +1,6 @@
 [language-server.gpt]
 command = "bun"
-args = ["run", "src/app.ts", "--handler", "copilot", "--logFile", "helix-gpt.log"]
+args = ["--inspect=0.0.0.0:6499", "run", "src/app.ts", "--handler", "copilot", "--logFile", "helix-gpt.log"]
 
 [language-server.ts]
 command = "typescript-language-server"

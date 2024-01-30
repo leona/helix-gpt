@@ -9,6 +9,8 @@ services:
     command: bash -c "sleep 999999s"
     restart: unless-stopped
     working_dir: /app
+    ports:
+      - 6499:6499
     logging:
       options:
         max-size: "10m"

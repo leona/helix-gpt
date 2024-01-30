@@ -3,6 +3,7 @@
   "module": "src/app.ts",
   "type": "module",
   "scripts": {
+    "dev": "bun --inspect=0.0.0.0:6499 run src/app.ts",
     "build:bin": "bun build ./src/app.ts --outfile=./dist/helix-gpt --compile --minify",
     "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun",
     "test": "TEST_RUNNER=true bun test"
