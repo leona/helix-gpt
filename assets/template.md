@@ -124,3 +124,4 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 - Support workspace commands to toggle functionality (pending Helix support for merging workspace commands)
 - Better test coverage
 - Async load completions to show other language server results immediately (pending Helix support)
+- Improve recovery from errors as it can leave the editor unusable sometimes
