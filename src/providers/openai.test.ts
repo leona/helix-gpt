@@ -3,7 +3,6 @@ import Openai from "./openai"
 
 const openai = new Openai()
 
-
 test("completion", async () => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -40,7 +39,6 @@ test("completion", async () => {
   expect(result).toEqual(["const name: string = \"John\";\nconsole.log(\"Hello, \" + name);", "console.log(\"Hello, world!\");"])
   expect(result.length).toEqual(2)
 })
-
 
 test("chat", async () => {
   global.fetch = jest.fn(() =>

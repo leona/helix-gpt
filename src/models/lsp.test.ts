@@ -12,4 +12,17 @@ test("parseLine", async () => {
 
   const content3 = `{"id": 1}\r\nContent-Length: 200\n`
   expect(lsp.parseLine(content3)).toEqual({ id: 1 })
+
+  const content4 = `  registerEventHandlers(handlers: Record<string, (lsp: IService) => void>) {
+    Object.values(handlers).forEach((i: (lsp: IService) => void) => {
+      i(this)
+    })
+  }
+`
+  const padding = lsp.getContentPadding(content4)
+  expect(padding).toEqual(2)
+
+  const content5 = `const example = 1`
+  const padding2 = lsp.getContentPadding(content5)
+  expect(padding2).toEqual(0)
 })

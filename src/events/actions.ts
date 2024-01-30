@@ -18,7 +18,9 @@ export const actions = (lsp: IService) => {
     ], 10000)
 
     const content = ctx.getContentFromRange(range)
+    const padding = ctx.getContentPadding(content)
     const buffer = ctx.buffers[ctx.currentUri]
+    log("chat request content:", content)
 
     try {
       var { result } = await assistant.chat(query, content, ctx.currentUri as string, buffer?.languageId as string)
@@ -36,6 +38,7 @@ export const actions = (lsp: IService) => {
       }], 10000)
     }
 
+    result = ctx.padContent(result.trim(), padding) + "\n"
     log("received chat result:", result)
 
     ctx.send({

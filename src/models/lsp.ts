@@ -47,13 +47,28 @@ class Service {
       const { uri, version } = request.params.textDocument
       this.buffers[uri] = { ...this.buffers[uri], version, text: request.params.contentChanges[0].text }
       this.currentUri = uri
-
-      // request.params.contentChanges.forEach((change) => {
-      //   this.positionalUpdate(uri, change.text, change.range)
-      // })
-
       log("received didChange", `language: ${this.buffers[uri].languageId}`, `contentVersion: ${version}`, `uri: ${uri}`)
     })
+  }
+
+  getContentPadding(text: string): number {
+    const lines = text.split("\n")
+
+    const smallestPadding = lines.reduce((acc, line) => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.length === 0) return acc;
+      const padding = line.match(/^\s+/)?.[0].length || 0;
+      return Math.min(padding, acc);
+    }, 99999);
+
+    return smallestPadding
+  }
+
+  padContent(text: string, padding: number): string {
+    return text.split("\n").map((line) => {
+      if (line.trim().length === 0) return line
+      return " ".repeat(padding) + line
+    }).join("\n")
   }
 
   registerEventHandlers(handlers: Record<string, (lsp: IService) => void>) {
@@ -65,7 +80,7 @@ class Service {
   getContentFromRange(range: Range): string {
     log("getting content from range", JSON.stringify(range), `uri: ${this.currentUri}`, `current buffers: ${JSON.stringify(Object.keys(this.buffers))}`)
     const { start, end } = range
-    return this.buffers[this.currentUri]?.text?.split("\n")?.slice(start.line, end.line + 1).join("\n")
+    return this.buffers[this.currentUri]?.text?.split("\n")?.slice(start.line, end.line).join("\n")
   }
 
   positionalUpdate(uri: string, text: string, range: Range) {

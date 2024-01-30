@@ -48,6 +48,8 @@ export interface IService {
   start(): Promise<void>;
   send({ method, id, result, params }: { method?: Event, id?: number, result?: any, params?: any }): void;
   getContentFromRange({ range }: { range: Range }): string;
+  getContentPadding(text: string): number;
+  padContent(text: string, padding: number): string;
   on(event: Event, callback: (request: EventRequest) => void): void;
 }
 
