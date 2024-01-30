@@ -1,4 +1,3 @@
-import { appendFileSync } from "node:fs"
 import config from "./config"
 import crypto from "crypto"
 import fs from "fs"
