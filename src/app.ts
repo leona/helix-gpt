@@ -24,7 +24,7 @@ const lsp = new Lsp.Service({
     },
     completionProvider: {
       resolveProvider: false,
-      triggerCharacters: ["{", "(", " ", "."]
+      triggerCharacters: ["{", "(", " "]
     },
     textDocumentSync: {
       change: 1,

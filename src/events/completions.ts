@@ -5,7 +5,19 @@ import assistant from "../models/assistant"
 
 export const completions = (lsp: IService) => {
   lsp.on(Lsp.Event.Completion, async ({ ctx, request }) => {
-    const lastContentVersion = ctx.buffers[request.params.textDocument.uri].version
+    const buffer = ctx.buffers[request.params.textDocument.uri]
+    const lastContentVersion = buffer.version
+    const { lastCharacter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
+
+    if (lastCharacter == ".") {
+      return ctx.send({
+        id: request.id,
+        result: {
+          isIncomplete: false,
+          items: []
+        }
+      })
+    }
 
     debounce("completion", () => {
       completion({ ctx, request, lastContentVersion })
@@ -99,7 +111,7 @@ export const completions = (lsp: IService) => {
     ctx.send({
       id: request.id,
       result: {
-        isIncomplete: true,
+        isIncomplete: false,
         items
       }
     })
