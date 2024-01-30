@@ -16,10 +16,9 @@ Code actions example (space + a)
 ### How?
 
 When a trigger character is pressed it will request a completion and use the entire file as context.
-Triggers characters: `["{", "(", " ", "."]`
-You can also use `ctrl+x` to manually trigger it.
+Default triggers characters: `["{", "(", " "]` can be overwritten with `--triggerCharacters "{||(|| "`
 
-Code actions are triggered by `space+a` and only use the selected code as context.
+Use `ctrl+x` to manually trigger completions, and `space+a` to trigger code actions that only use the selected code as context.
 
 ### Install
 
@@ -124,3 +123,4 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 - Single config for all languages (pending [#9318](https://github.com/helix-editor/helix/pull/9318))
 - Support workspace commands to toggle functionality (pending Helix support for merging workspace commands)
 - Better test coverage
+- Async load completions to show other language server results immediately (pending Helix support)
