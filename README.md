@@ -1,7 +1,7 @@
 # helix-gpt
 
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
-![Github Release](https://img.shields.io/badge/release-v0.23-blue)
+![Github Release](https://img.shields.io/badge/release-v0.24-blue)
 
 Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
@@ -16,10 +16,9 @@ Code actions example (space + a)
 ### How?
 
 When a trigger character is pressed it will request a completion and use the entire file as context.
-Triggers characters: `["{", "(", " ", "."]`
-You can also use `ctrl+x` to manually trigger it.
+Default triggers characters: `["{", "(", " "]` can be overwritten with `--triggerCharacters "{||(|| "`
 
-Code actions are triggered by `space+a` and only use the selected code as context.
+Use `ctrl+x` to manually trigger completions, and `space+a` to trigger code actions that only use the selected code as context.
 
 ### Install
 
@@ -28,17 +27,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.23/helix-gpt-0.23-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.24/helix-gpt-0.24-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.23-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.24-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun (tested with 1.0.25)
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.23/helix-gpt-0.23.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/0.24/helix-gpt-0.24.js -O helix-gpt.js
 ```
 
 ### Configuration
@@ -124,3 +123,5 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 - Single config for all languages (pending [#9318](https://github.com/helix-editor/helix/pull/9318))
 - Support workspace commands to toggle functionality (pending Helix support for merging workspace commands)
 - Increase test coverage
+- Async load completions to show other language server results immediately (pending Helix support)
+- Improve recovery from errors as it can leave the editor unusable sometimes
