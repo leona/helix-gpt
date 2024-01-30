@@ -12,6 +12,10 @@ const { values } = parseArgs({
       type: 'string',
       default: Bun.env.HANDLER ?? 'openai'
     },
+    triggerCharacters: {
+      type: 'string',
+      default: Bun.env.TRIGGER_CHARACTERS ?? '{||(|| '
+    },
     openaiKey: {
       type: 'string',
       default: Bun.env.OPENAI_API_KEY
@@ -60,5 +64,7 @@ const { values } = parseArgs({
 if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length) {
   throw new Error("no handler key provided")
 }
+
+values.triggerCharacters = values.triggerCharacters.split('||')
 
 export default values

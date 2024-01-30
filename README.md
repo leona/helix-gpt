@@ -16,10 +16,10 @@ Code actions example (space + a)
 ### How?
 
 When a trigger character is pressed it will request a completion and use the entire file as context.
-Triggers characters: `["{", "(", " "]`
-You can also use `ctrl+x` to manually trigger it.
 
-Code actions are triggered by `space+a` and only use the selected code as context.
+Default triggers characters: `["{", "(", " "]` can be overwritten with `--triggerCharacters "{||(|| "`
+
+Use `ctrl+x` to manually trigger completions, and `space+a` to trigger code actions that only use the selected code as context.
 
 ### Install
 
