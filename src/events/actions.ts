@@ -7,7 +7,8 @@ import { log } from "../utils"
 export const actions = (lsp: Service) => {
   lsp.on(Event.ExecuteCommand, async ({ ctx, request }) => {
     const { command } = request.params
-    const { range, query } = request.params.arguments[0]
+    const { diagnostics, range } = request.params.arguments[0]
+    let { query } = request.params.arguments[0]
 
     ctx.sendDiagnostics([
       {
@@ -21,6 +22,10 @@ export const actions = (lsp: Service) => {
     const padding = ctx.getContentPadding(content)
     const buffer = ctx.buffers[ctx.currentUri]
     log("chat request content:", content)
+
+    if (diagnostics?.length) {
+      query += "\n\nDiagnostics: " + diagnostics.join("\n- ")
+    }
 
     try {
       var { result } = await assistant.chat(query, content, ctx.currentUri as string, buffer?.languageId as string)
@@ -74,7 +79,8 @@ export const actions = (lsp: Service) => {
           command: i.key,
           arguments: [{
             range: request.params.range,
-            query: i.query
+            query: i.query,
+            diagnostics: request.params.context?.diagnostics?.map(i => i.message)
           }]
         }
       }))

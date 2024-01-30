@@ -91,7 +91,6 @@ export class Chat {
 
   static fromResponse(data: any, filepath: string, language: string): Chat {
     const choices = data?.choices?.map(i => i.message?.content)
-    log("TEST", choices)
     const result = extractCodeBlock(filepath, choices[0], language)
     return new Chat(result as string)
   }

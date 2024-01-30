@@ -23,7 +23,7 @@ const getProvider = (key: string): Provider => {
 }
 
 const chat = async (...args: any[]) => {
-  log(config.handler, "chat request")
+  log(config.handler, "chat request", JSON.stringify(args))
   return getProvider(config.handler).chat(...args)
 }
 

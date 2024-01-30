@@ -9,7 +9,7 @@ export class Service {
   currentUri?: string
   buffers: Record<string, Buffer>
 
-  constructor({ capabilities }: any) {
+  constructor({ capabilities }: { capabilities: any }) {
     this.emitter = new EventEmitter({ captureRejections: true })
     this.capabilities = capabilities
     this.buffers = {}

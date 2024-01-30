@@ -20,6 +20,11 @@ export const examples = [
 
 export const commands = [
   {
+    key: "resolveDiagnostics",
+    label: "Resolve diagnostics",
+    query: "Resolve the diagnostics for this code."
+  },
+  {
     key: "generateDocs",
     label: "Generate documentation",
     query: "Add documentation to this code."

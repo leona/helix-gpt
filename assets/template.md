@@ -117,11 +117,9 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 ### Todo
 
 - [x] Copilot support
+- [x] Resolve diagnostics code action
 - Self-hosted model support (partial support if they are openai compliant)
 - Inline completion provider (pending support from Helix)
-- Error fixing assistant
 - Single config for all languages (pending [#9318](https://github.com/helix-editor/helix/pull/9318))
 - Support workspace commands to toggle functionality (pending Helix support for merging workspace commands)
-- Better test coverage
-- Async load completions to show other language server results immediately (pending Helix support)
-- Improve recovery from errors as it can leave the editor unusable sometimes
+- Increase test coverage
