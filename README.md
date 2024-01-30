@@ -124,3 +124,4 @@ tail -f /app/helix-gpt.log # Or wherever you set --logFile to
 - Single config for all languages (pending [#9318](https://github.com/helix-editor/helix/pull/9318))
 - Support workspace commands to toggle functionality (pending Helix support for merging workspace commands)
 - Better test coverage
+- Async load completions to show other language server results immediately (pending Helix support)
