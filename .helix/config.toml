@@ -1,4 +1,7 @@
-theme = "tokyonight_storm"
+theme = "bogster"
+
+[editor]
+true-color = true
 
 [editor.cursor-shape]
 insert = "bar"

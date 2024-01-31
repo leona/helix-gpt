@@ -57,6 +57,7 @@ fi\n\
 exec "$@"\n ' > /entrypoint.sh
 
 ENV PATH="${PATH}:/root/.bun/bin"
+ADD ./.helix /root/.config/helix
 RUN ln -s /usr/local/bin/bun /usr/local/bin/node
 RUN bun install -g typescript typescript-language-server
 RUN chmod +x /entrypoint.sh 
