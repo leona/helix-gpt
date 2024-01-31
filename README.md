@@ -1,7 +1,7 @@
 # helix-gpt
 
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
-![Github Release](https://img.shields.io/badge/release-v0.24-blue)
+![Github Release](https://img.shields.io/badge/release-v0.25-blue)
 
 Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
 
@@ -12,6 +12,8 @@ Completion example
 Code actions example (space + a)
 
 ![helix-gpt example](https://github.com/leona/helix-gpt/raw/master/assets/example2.gif)
+
+Available code actions: `resolveDiagnostics` `generateDocs` `improveCode` `refactorFromComment` `writeTest`
 
 ### How?
 
@@ -27,17 +29,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.24/helix-gpt-0.24-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.25/helix-gpt-0.25-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.24-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.25-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun (tested with 1.0.25)
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.24/helix-gpt-0.24.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/0.25/helix-gpt-0.25.js -O helix-gpt.js
 ```
 
 ### Configuration
