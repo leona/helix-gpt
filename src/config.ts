@@ -12,6 +12,10 @@ const { values } = parseArgs({
       type: 'string',
       default: Bun.env.HANDLER ?? 'openai'
     },
+    debounce: {
+      type: 'string',
+      default: Bun.env.DEBOUNCE ?? '400'
+    },
     triggerCharacters: {
       type: 'string',
       default: Bun.env.TRIGGER_CHARACTERS ?? '{||(|| '

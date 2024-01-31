@@ -2,6 +2,7 @@ import { Service } from "../models/lsp"
 import { Event, DiagnosticSeverity } from "../models/lsp.types"
 import { debounce, log, getContent } from "../utils"
 import assistant from "../models/assistant"
+import config from "../config"
 
 export const completions = (lsp: Service) => {
   lsp.on(Event.Completion, async ({ ctx, request }) => {
@@ -35,7 +36,7 @@ export const completions = (lsp: Service) => {
           }
         ], 10000)
       }
-    }, 500)
+    }, parseInt(config.debounce))
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
