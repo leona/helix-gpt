@@ -5,11 +5,17 @@ import { log } from "./utils"
 import config from "./config"
 import assistant from "./models/assistant"
 import copilotAuth from "./models/copilot-auth"
+import codeiumAuth from "./models/codeium-auth"
 import Github from "./providers/github"
 import Openai from "./providers/openai"
 
 if (config.authCopilot) {
   await copilotAuth()
+  process.exit(0)
+}
+
+if (config.authCodeium) {
+  await codeiumAuth()
   process.exit(0)
 }
 

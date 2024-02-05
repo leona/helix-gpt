@@ -59,6 +59,10 @@ const { values } = parseArgs({
     authCopilot: {
       type: 'boolean',
       default: false
+    },
+    authCodeium: {
+      type: 'boolean',
+      default: false
     }
   },
   strict: true,
