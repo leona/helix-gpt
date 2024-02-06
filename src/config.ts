@@ -59,13 +59,21 @@ const { values } = parseArgs({
     authCopilot: {
       type: 'boolean',
       default: false
+    },
+    authCodeium: {
+      type: 'boolean',
+      default: false
+    },
+    codeiumApiKey: {
+      type: 'string',
+      default: Bun.env.CODEIUM_API_KEY ?? "d49954eb-cfba-4992-980f-d8fb37f0e942" // Public Codeium key
     }
   },
   strict: true,
   allowPositionals: true,
 });
 
-if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length) {
+if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length && values.handler !== "codeium") {
   throw new Error("no handler key provided")
 }
 

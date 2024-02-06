@@ -3,7 +3,7 @@
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
 ![Github Release](https://img.shields.io/badge/release-v<release-version>-blue)
 
-Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
+Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot/OpenAI/Codeium.
 
 Completion example
 
@@ -53,9 +53,10 @@ NOTE: Copilot is the best choice due to the model and implementation.
 #### Environment Variables
 
 ```bash
-OPENAI_API_KEY=123 # At least 1 API key needed
-COPILOT_API_KEY=123
-HANDLER=openai # Can be openai or copilot
+OPENAI_API_KEY=123 # Required if using openai handler
+COPILOT_API_KEY=123 # Required if using copilot handler
+CODEIUM_API_KEY=123 # Not required, will use public API key otherwise.
+HANDLER=openai # openai/copilot/codeium
 ```
 
 #### Command Line Arguments

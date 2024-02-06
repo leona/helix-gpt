@@ -5,16 +5,24 @@ import { log } from "./utils"
 import config from "./config"
 import assistant from "./models/assistant"
 import copilotAuth from "./models/copilot-auth"
+import codeiumAuth from "./models/codeium-auth"
 import Github from "./providers/github"
 import Openai from "./providers/openai"
+import Codeium from "./providers/codeium"
 
 if (config.authCopilot) {
   await copilotAuth()
   process.exit(0)
 }
 
+if (config.authCodeium) {
+  await codeiumAuth()
+  process.exit(0)
+}
+
 assistant.registerProvider("copilot", new Github())
 assistant.registerProvider("openai", new Openai())
+assistant.registerProvider("codeium", new Codeium())
 
 const lsp = new Lsp.Service({
   capabilities: {

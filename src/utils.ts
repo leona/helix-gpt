@@ -19,6 +19,10 @@ export const genHexStr = (length: number) => {
   return bytes.toString('hex');
 }
 
+export const uuid = () => {
+  return genHexStr(8) + "-" + genHexStr(4) + "-" + genHexStr(4) + "-" + genHexStr(4) + "-" + genHexStr(12);
+}
+
 export const getContent = async (contents: string, line: number, column: number) => {
   const lines = contents?.split('\n').slice(0, line + 1)
   lines[lines.length - 1] = lines[lines.length - 1].split('').slice(0, column).join('')
