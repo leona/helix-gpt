@@ -39,7 +39,7 @@ wget https://github.com/leona/helix-gpt/releases/download/<release-version>/heli
 #### With Bun (tested with 1.0.25)
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/<release-version>/helix-gpt-<release-version>.js -O helix-gpt.js
+wget https://github.com/leona/helix-gpt/releases/download/<release-version>/helix-gpt-<release-version>.js -O /usr/bin/helix-gpt
 ```
 
 ### Configuration
