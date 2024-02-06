@@ -2,8 +2,8 @@ import config from "../config"
 import { log } from "../utils"
 
 interface Provider {
-  chat(request: string, contents: any, filepath: string, language: string): Promise<any>
-  completion(contents: any, filepath: string, language: string): Promise<any>
+  chat?(request: string, contents: any, filepath: string, language: string): Promise<any>
+  completion?(contents: any, filepath: string, language: string): Promise<any>
 }
 
 const providers: Record<string, Provider> = {}
@@ -24,12 +24,28 @@ const getProvider = (key: string): Provider => {
 
 const chat = async (...args: any[]) => {
   log(config.handler, "chat request", JSON.stringify(args))
-  return getProvider(config.handler).chat(...args)
+  const provider = getProvider(config.handler)
+
+  if (!provider.chat) {
+    const error = `No chat provider for: ${config.handler}`
+    log(error)
+    throw new Error(error)
+  }
+
+  return provider.chat(...args)
 }
 
 const completion = async (...args: any[]) => {
   log(config.handler, "completion request")
-  return getProvider(config.handler).completion(...args)
+  const provider = getProvider(config.handler)
+
+  if (!provider.completion) {
+    const error = `No completion provider for: ${config.handler}`
+    log(error)
+    throw new Error(error)
+  }
+
+  return provider.completion(...args)
 }
 
 export default { chat, completion, registerProvider }

@@ -93,6 +93,26 @@ export default class Codeium extends ApiBase {
     return `https://codeium.com/profile?response_type=token&redirect_uri=vim-show-auth-token&state=${this.sessionId}&scope=openid%20profile%20email&redirect_parameters_type=query`
   }
 
+  async register(token: string): Promise<string> {
+    const headers = {
+      "Content-Type": "application/json"
+    }
+
+    const body = {
+      firebase_id_token: token,
+    }
+
+    const data = await this.request({
+      method: "POST",
+      headers,
+      url: "https://api.codeium.com",
+      endpoint: "/register_user/",
+      body
+    })
+
+    return data?.api_key
+  }
+
   async completion(contents: any, filepath: string, languageId: string, suggestions = 3): Promise<types.Completion> {
     const headers = {
       "Content-Type": "application/json",
