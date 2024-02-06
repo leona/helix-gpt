@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "bun --inspect=0.0.0.0:6499 run src/app.ts",
     "build:bin": "bun build ./src/app.ts --outfile=./dist/helix-gpt --compile --minify",
-    "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun",
+    "build:smol": "bun build ./src/app.ts --outfile=./dist/helix-gpt.js --minify --target bun; echo '#!/usr/bin/env bun' > ./dist/temp.js && cat ./dist/helix-gpt.js >> ./dist/temp.js && mv ./dist/temp.js ./dist/helix-gpt.js",
     "test": "TEST_RUNNER=true bun test"
   },
   "devDependencies": {
