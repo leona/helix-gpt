@@ -1,9 +1,9 @@
 # helix-gpt
 
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
-![Github Release](https://img.shields.io/badge/release-v0.26-blue)
+![Github Release](https://img.shields.io/badge/release-v0.27-blue)
 
-Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot + OpenAI.
+Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot/OpenAI/Codeium.
 
 Completion example
 
@@ -29,17 +29,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.26/helix-gpt-0.26-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.27/helix-gpt-0.27-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.26-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.27-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun (tested with 1.0.25)
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.26/helix-gpt-0.26.js -O /usr/bin/helix-gpt
+wget https://github.com/leona/helix-gpt/releases/download/0.27/helix-gpt-0.27.js -O /usr/bin/helix-gpt
 ```
 
 ### Configuration
@@ -53,9 +53,10 @@ NOTE: Copilot is the best choice due to the model and implementation.
 #### Environment Variables
 
 ```bash
-OPENAI_API_KEY=123 # At least 1 API key needed
-COPILOT_API_KEY=123
-HANDLER=openai # Can be openai or copilot
+OPENAI_API_KEY=123 # Required if using openai handler
+COPILOT_API_KEY=123 # Required if using copilot handler
+CODEIUM_API_KEY=123 # Not required, will use public API key otherwise.
+HANDLER=openai # openai/copilot/codeium
 ```
 
 #### Command Line Arguments
