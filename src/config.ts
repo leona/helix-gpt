@@ -63,6 +63,10 @@ const { values } = parseArgs({
     authCodeium: {
       type: 'boolean',
       default: false
+    },
+    codeiumApiKey: {
+      type: 'string',
+      default: Bun.env.CODEIUM_API_KEY ?? "d49954eb-cfba-4992-980f-d8fb37f0e942" // Public Codeium key
     }
   },
   strict: true,
