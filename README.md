@@ -82,6 +82,8 @@ Example for TypeScript `.helix/languages.toml` tested with Helix 23.10 (older ve
 ```toml
 [language-server.gpt]
 command = "helix-gpt"
+# HANDLER can be set to openai/copilot/codeium
+environment = { HANDLER= "codeium" }
 
 [language-server.ts]
 command = "typescript-language-server"
@@ -102,6 +104,7 @@ In case you opt out of the precompiled binary, modify as follows:
 [language-server.gpt]
 command = "bun"
 args = ["run", "/app/helix-gpt.js"]
+environment = { HANDLER= "codeium" }
 ```
 
 ### All Done
