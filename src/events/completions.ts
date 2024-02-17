@@ -107,7 +107,7 @@ export const completions = (lsp: Service) => {
       log("TEST", cleanLine, cleanCharacter)
 
       return {
-        label: i.split('\n')[0],
+        label: i.split('\n')[0].trim(),
         kind: 1,
         preselect: true,
         detail: i,
