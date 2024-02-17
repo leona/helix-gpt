@@ -60,7 +60,7 @@ export const completions = (lsp: Service) => {
       return skip()
     }
 
-    const { lastLine, contentBefore, contentAfter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
+    const { lastLine, contentBefore, contentAfter, contentImmediatelyAfter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
     log("calling completion event")
 
     ctx.sendDiagnostics([
@@ -83,7 +83,7 @@ export const completions = (lsp: Service) => {
           severity: DiagnosticSeverity.Error,
           range: {
             start: { line: request.params.position.line, character: 0 },
-            end: { line: request.params.position.line + 1, character: 0 }
+            end: { line: request.params.position.line + 1, character: contentImmediatelyAfter?.length }
           }
         }
       ], 10000)
@@ -103,6 +103,8 @@ export const completions = (lsp: Service) => {
       if (cleanLine == request.params.position.line) {
         cleanCharacter += request.params.position.character
       }
+
+      log("TEST", cleanLine, cleanCharacter)
 
       return {
         label: i.split('\n')[0],

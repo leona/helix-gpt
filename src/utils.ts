@@ -30,7 +30,8 @@ export const getContent = async (contents: string, line: number, column: number)
   const contentBefore = lines.join('\n')
   const contentAfter = contents?.split('\n').slice(line + 1).join('\n')
   const lastCharacter = contentBefore.slice(-1)
-  return { contentBefore, contentAfter, lastCharacter, lastLine }
+  const contentImmediatelyAfter = contents?.split('\n')[line].slice(column)
+  return { contentBefore, contentAfter, lastCharacter, lastLine, contentImmediatelyAfter }
 }
 
 let logStream: fs.WriteStream | undefined
