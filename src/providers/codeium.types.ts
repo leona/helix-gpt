@@ -7,7 +7,6 @@ export class Completion extends Array<string> {
   }
 
   static fromResponse(data: any): Completion {
-    console.log(123, data)
-    return data.completionItems.map(i => i.completion.text)
+    return data.completionItems?.map(i => i.completion.text)
   }
 }
