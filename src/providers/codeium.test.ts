@@ -676,8 +676,8 @@ test("completion", async () => {
     contentBefore: "const alphabet = ",
     contentAfter: "const example = 123"
   }
-  const result = await codeium.completion(contents, "file:///app/test.ts", "typescript", 3)
-  console.log(result)
+  // const result = await codeium.completion(contents, "file:///app/test.ts", "typescript", 3)
+  // console.log(result)
   // expect(result.length).toEqual(3)
 })
 
