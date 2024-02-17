@@ -83,7 +83,7 @@ export const completions = (lsp: Service) => {
           severity: DiagnosticSeverity.Error,
           range: {
             start: { line: request.params.position.line, character: 0 },
-            end: { line: request.params.position.line + 1, character: contentImmediatelyAfter?.length }
+            end: { line: request.params.position.line + 1, character: 0 }
           }
         }
       ], 10000)
@@ -118,7 +118,7 @@ export const completions = (lsp: Service) => {
             newText: "",
             range: {
               start: { line: cleanLine, character: cleanCharacter },
-              end: { line: cleanLine, character: 200 }
+              end: { line: cleanLine, character: cleanCharacter + contentImmediatelyAfter?.length }
             }
           }
         ]
