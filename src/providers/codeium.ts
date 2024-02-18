@@ -123,9 +123,9 @@ export default class Codeium extends ApiBase {
 
     const body = {
       "metadata": {
-        "ideName": "Helix",
+        "ideName": "web",
         "ideVersion": "unknown",
-        "extensionVersion": "unknown",
+        "extensionVersion": "1.6.13",
         "extensionName": "helix-gpt",
         "apiKey": this.apiKey,
         "sessionId": this.sessionId
