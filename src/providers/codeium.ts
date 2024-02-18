@@ -123,8 +123,10 @@ export default class Codeium extends ApiBase {
 
     const body = {
       "metadata": {
+        // The editor name needs to be known by codeium
         "ideName": "web",
         "ideVersion": "unknown",
+        // The version needs to a recent one, so codeium accepts it
         "extensionVersion": "1.6.13",
         "extensionName": "helix-gpt",
         "apiKey": this.apiKey,
