@@ -73,7 +73,7 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
-if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilotApiKey?.length && values.handler !== "codeium") {
+if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !(values.copilotApiKey?.length || values.authCopilot) && values.handler !== "codeium") {
   throw new Error("no handler key provided")
 }
 
