@@ -130,7 +130,7 @@ export class Service {
       params
     })
 
-    console.log(`Content-Length: ${request.length}\r\n\r\n${request}`)
+    process.stdout.write(`Content-Length: ${request.length}\r\n\r\n${request}`)
     log("sent request", request)
   }
 
