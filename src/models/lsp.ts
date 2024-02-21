@@ -24,7 +24,6 @@ export class Service {
 
     this.on(Event.Initialize, async ({ ctx }) => {
       ctx.send({
-        method: Event.Initialize,
         id: 0,
         result: {
           capabilities: this.capabilities
