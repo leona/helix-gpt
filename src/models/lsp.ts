@@ -22,9 +22,9 @@ export class Service {
       log("lsp-event-emitter error", e.message)
     })
 
-    this.on(Event.Initialize, async ({ ctx }) => {
+    this.on(Event.Initialize, async ({ ctx, request }) => {
       ctx.send({
-        id: 0,
+        id: request.id,
         result: {
           capabilities: this.capabilities
         }
