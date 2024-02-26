@@ -1,3 +1,4 @@
+import "./deno-compat"
 import Lsp from "./models/lsp"
 import { commands } from "./constants"
 import * as handlers from "./events"
@@ -9,6 +10,7 @@ import codeiumAuth from "./models/codeium-auth"
 import Github from "./providers/github"
 import Openai from "./providers/openai"
 import Codeium from "./providers/codeium"
+
 
 if (config.authCopilot) {
   await copilotAuth()
