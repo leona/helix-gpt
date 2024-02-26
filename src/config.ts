@@ -1,5 +1,6 @@
-import { parseArgs } from "util"
 import { context } from "./constants"
+import { runningInDeno } from "./deno-compat";
+const { parseArgs } = await import(runningInDeno() ? "./deno-compat" : "util")
 
 const { values } = parseArgs({
   args: Bun.argv,
