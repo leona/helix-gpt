@@ -91,9 +91,10 @@ export const completions = (lsp: Service) => {
 
     log("completion hints:", hints)
 
-    const items = hints?.map((i) => {
+    const items = hints?.map((i: string) => {
+      i = i.trim()
       if (i.startsWith(lastLine.trim())) {
-        i = i.slice(lastLine.trim().length)
+        i = i.slice(lastLine.trim().length).trim()
       }
 
       const lines = i.split('\n')
@@ -107,7 +108,7 @@ export const completions = (lsp: Service) => {
       log("TEST", cleanLine, cleanCharacter)
 
       return {
-        label: i.trim().split('\n')[0],
+        label: lines[0],
         kind: 1,
         preselect: true,
         detail: i,
