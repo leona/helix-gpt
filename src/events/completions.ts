@@ -108,7 +108,7 @@ export const completions = (lsp: Service) => {
       log("TEST", cleanLine, cleanCharacter)
 
       return {
-        label: lines[0],
+        label: lines[0].length > 20 ? lines[0] : i.slice(0, 20).trim(),
         kind: 1,
         preselect: true,
         detail: i,
