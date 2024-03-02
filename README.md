@@ -3,7 +3,7 @@
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
 ![Github Release](https://img.shields.io/badge/release-v0.28-blue)
 
-Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot/OpenAI/Codeium.
+Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot/OpenAI/Codeium/Ollama.
 
 Completion example
 
