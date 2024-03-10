@@ -1,5 +1,5 @@
-import EventEmitter from "node:events"
-import { Service } from "./lsp"
+import EventEmitter from "node:events";
+import { Service } from "./lsp.ts";
 
 export enum Event {
   DidOpen = "textDocument/didOpen",

@@ -1,7 +1,7 @@
-import ApiBase from "../models/api"
-import * as types from "./openai.types"
-import config from "../config"
-import { log } from "../utils"
+import ApiBase from "../models/api.ts";
+import * as types from "./openai.types.ts";
+import config from "../config.ts";
+import { log } from "../utils.ts";
 
 export default class Github extends ApiBase {
 

@@ -1,8 +1,8 @@
-import { Service } from "../models/lsp"
-import { Event, DiagnosticSeverity } from "../models/lsp.types"
-import { debounce, log, getContent } from "../utils"
-import assistant from "../models/assistant"
-import config from "../config"
+import { Service } from "../models/lsp.ts";
+import { DiagnosticSeverity, Event } from "../models/lsp.types.ts";
+import { debounce, getContent, log } from "../utils.ts";
+import assistant from "../models/assistant.ts";
+import config from "../config.ts";
 
 export const completions = (lsp: Service) => {
   lsp.on(Event.Completion, async ({ ctx, request }) => {

@@ -1,4 +1,4 @@
-import Codeium from "../providers/codeium";
+import Codeium from "../providers/codeium.ts";
 
 export default async () => {
   const codeium = new Codeium();

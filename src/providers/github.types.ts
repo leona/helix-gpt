@@ -1,4 +1,9 @@
-import { uniqueStringArray, parseQuery, parseQueryStringToken, extractCodeBlock } from "../utils"
+import {
+  extractCodeBlock,
+  parseQuery,
+  parseQueryStringToken,
+  uniqueStringArray,
+} from "../utils.ts";
 
 export class DeviceCode {
   deviceCode: string;

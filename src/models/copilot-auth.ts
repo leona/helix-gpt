@@ -1,4 +1,4 @@
-import Github from "../providers/github"
+import Github from "../providers/github.ts";
 
 export default async () => {
   const github = new Github()
