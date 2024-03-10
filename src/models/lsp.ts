@@ -1,7 +1,7 @@
-import EventEmitter from "node:events"
-import { log } from "../utils"
-import type { Buffer, Range, Diagnostic, EventRequest } from "./lsp.types"
-import { Event, DiagnosticSeverity } from "./lsp.types"
+import EventEmitter from "node:events";
+import { log } from "../utils.ts";
+import type { Buffer, Diagnostic, EventRequest, Range } from "./lsp.types.ts";
+import { DiagnosticSeverity, Event } from "./lsp.types.ts";
 
 export class Service {
   emitter: EventEmitter

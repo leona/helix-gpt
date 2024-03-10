@@ -1,5 +1,5 @@
-import { log } from "../utils"
-import config from "../config";
+import { log } from "../utils.ts";
+import config from "../config.ts";
 
 interface Request {
   endpoint: string;

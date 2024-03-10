@@ -1,2 +1,2 @@
-export * from "./actions"
-export * from "./completions"
+export * from "./actions.ts";
+export * from "./completions.ts";

@@ -1,9 +1,9 @@
-import { Service } from "../models/lsp"
-import { Event, DiagnosticSeverity } from "../models/lsp.types"
-import { commands } from "../constants"
-import assistant from "../models/assistant"
-import { log } from "../utils"
-import config from "../config";
+import { Service } from "../models/lsp.ts";
+import { DiagnosticSeverity, Event } from "../models/lsp.types.ts";
+import { commands } from "../constants.ts";
+import assistant from "../models/assistant.ts";
+import { log } from "../utils.ts";
+import config from "../config.ts";
 
 export const actions = (lsp: Service) => {
   lsp.on(Event.ExecuteCommand, async ({ ctx, request }) => {

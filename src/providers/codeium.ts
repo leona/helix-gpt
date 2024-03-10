@@ -1,7 +1,7 @@
-import { uuid } from "../utils";
-import ApiBase from "../models/api"
-import * as types from "./codeium.types"
-import config from "../config"
+import { uuid } from "../utils.ts";
+import ApiBase from "../models/api.ts";
+import * as types from "./codeium.types.ts";
+import config from "../config.ts";
 
 const languages = {
   unspecified: 0,

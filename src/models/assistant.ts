@@ -1,5 +1,5 @@
-import config from "../config"
-import { log } from "../utils"
+import config from "../config.ts";
+import { log } from "../utils.ts";
 
 interface Provider {
   chat?(request: string, contents: any, filepath: string, language: string): Promise<any>

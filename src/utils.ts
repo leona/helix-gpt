@@ -1,6 +1,6 @@
-import config from "./config"
-import crypto from "crypto"
-import fs from "fs"
+import config from "./config.ts";
+import crypto from "node:crypto";
+import fs from "node:fs";
 
 const debounces: Record<string, NodeJS.Timeout> = {}
 

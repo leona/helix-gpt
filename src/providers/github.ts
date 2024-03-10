@@ -1,7 +1,7 @@
-import { genHexStr, currentUnixTimestamp } from "../utils";
-import ApiBase from "../models/api"
-import * as types from "./github.types"
-import config from "../config"
+import { currentUnixTimestamp, genHexStr } from "../utils.ts";
+import ApiBase from "../models/api.ts";
+import * as types from "./github.types.ts";
+import config from "../config.ts";
 
 export default class Github extends ApiBase {
 
