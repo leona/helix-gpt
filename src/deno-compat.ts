@@ -30,6 +30,9 @@ class Bun {
   }
 }
 
+// deno parseArgs node compat doesn't support default option currently
+// so we use a custom one for now
+// https://github.com/denoland/deno/issues/22454
 export function parseArgs(inputObject) {
   const { args, options } = inputObject;
 
