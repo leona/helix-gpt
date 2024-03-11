@@ -10,8 +10,6 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-
-            config.allowUnfree = true;
           };
 
           node_modules = with pkgs; stdenv.mkDerivation {
@@ -21,7 +19,6 @@
             dontConfigure = true;
             dontFixup = true;
             nativeBuildInputs = [ bun ];
-            buildInputs = [ nodejs_20 ];
             impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
 
             buildPhase = ''
@@ -39,21 +36,34 @@
             outputHashMode = "recursive";
           };
           helix-gpt = with pkgs; stdenv.mkDerivation {
-
             name = "helix-gpt";
             src = ./.;
 
-            dontConfigure = true;
             dontBuild = true;
+            doCheck = true;
             nativeBuildInputs = [ makeBinaryWrapper ];
             buildInputs = [ bun ];
+
+            configurePhase = ''
+              runHook preConfigure
+            
+              mkdir -p $out/bin
+              ln -s ${node_modules}/node_modules $out
+
+              runHook postConfigure
+            '';
+
+            checkPhase = ''
+              runHook preCheck
+            
+              bun run test
+
+              runHook postCheck 
+            '';
 
             installPhase = ''
               runHook preInstall
 
-              mkdir -p $out/bin
-
-              ln -s ${node_modules}/node_modules $out
               cp -R ./* $out
 
               makeBinaryWrapper ${bun}/bin/bun $out/bin/helix-gpt \
@@ -65,6 +75,10 @@
           };
         in
         {
+          checks = {
+            inherit helix-gpt;
+          };
+
           packages = {
             default = helix-gpt;
           };
@@ -72,7 +86,6 @@
           devShells.default = with pkgs; mkShell {
             packages = with pkgs; [
               bun
-              nodejs_20
             ];
           };
         });
