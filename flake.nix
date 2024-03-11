@@ -75,17 +75,11 @@
           };
         in
         {
-          checks = {
-            inherit helix-gpt;
-          };
+          checks.default = helix-gpt;
 
-          packages = {
-            default = helix-gpt;
-          };
+          packages.default = helix-gpt;
 
-          overlays = {
-            default = final: prev: { helix-gpt = helix-gpt; };
-          };
+          overlays.default = final: prev: { helix-gpt = helix-gpt; };
 
           devShells.default = with pkgs; mkShell {
             packages = with pkgs; [
