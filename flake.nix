@@ -83,6 +83,10 @@
             default = helix-gpt;
           };
 
+          overlays = {
+            default = final: prev: { helix-gpt = helix-gpt; };
+          };
+
           devShells.default = with pkgs; mkShell {
             packages = with pkgs; [
               bun
