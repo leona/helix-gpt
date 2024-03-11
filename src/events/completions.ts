@@ -4,6 +4,8 @@ import { debounce, log, getContent } from "../utils"
 import assistant from "../models/assistant"
 import config from "../config"
 
+const sendTimeout = parseInt(config.completionTimeout as string);
+
 export const completions = (lsp: Service) => {
   lsp.on(Event.Completion, async ({ ctx, request }) => {
     const buffer = ctx.buffers[request.params.textDocument.uri]
@@ -34,7 +36,7 @@ export const completions = (lsp: Service) => {
               end: { line: request.params.position.line + 1, character: 0 }
             }
           }
-        ], 10000)
+        ], sendTimeout)
       }
     }, parseInt(config.debounce))
   })
@@ -72,7 +74,7 @@ export const completions = (lsp: Service) => {
           end: { line: request.params.position.line + 1, character: 0 }
         }
       }
-    ], 10000)
+    ], sendTimeout)
 
     try {
       var hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)

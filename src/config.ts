@@ -67,6 +67,14 @@ const { values } = parseArgs({
     codeiumApiKey: {
       type: 'string',
       default: Bun.env.CODEIUM_API_KEY ?? "d49954eb-cfba-4992-980f-d8fb37f0e942" // Public Codeium key
+    },
+    actionTimeout: {
+      type: 'string',
+      default: Bun.env.ACTION_TIMEOUT ?? "10000"
+    },
+    completionTimeout: {
+      type: 'string',
+      default: Bun.env.COMPLETION_TIMEOUT ?? "10000"
     }
   },
   strict: true,
