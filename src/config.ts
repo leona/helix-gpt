@@ -67,6 +67,18 @@ const { values } = parseArgs({
     codeiumApiKey: {
       type: 'string',
       default: Bun.env.CODEIUM_API_KEY ?? "d49954eb-cfba-4992-980f-d8fb37f0e942" // Public Codeium key
+    },
+    fetchTimeout: {
+      type: 'string',
+      default: Bun.env.FETCH_TIMEOUT ?? "10000"
+    },
+    actionTimeout: {
+      type: 'string',
+      default: Bun.env.ACTION_TIMEOUT ?? "10000"
+    },
+    completionTimeout: {
+      type: 'string',
+      default: Bun.env.COMPLETION_TIMEOUT ?? "10000"
     }
   },
   strict: true,
@@ -77,6 +89,12 @@ if (!Bun.env.TEST_RUNNER?.length && !values.openaiKey?.length && !values.copilot
   throw new Error("no handler key provided")
 }
 
-values.triggerCharacters = values.triggerCharacters.split('||')
 
-export default values
+export default {
+  ...values,
+  triggerCharacters: (values.triggerCharacters as string).split('||'),
+  debounce: parseInt(values.debounce as string),
+  fetchTimeout: parseInt(values.fetchTimeout as string),
+  actionTimeout: parseInt(values.actionTimeout as string),
+  completionTimeout: parseInt(values.completionTimeout as string)
+}

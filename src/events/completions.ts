@@ -34,9 +34,9 @@ export const completions = (lsp: Service) => {
               end: { line: request.params.position.line + 1, character: 0 }
             }
           }
-        ], 10000)
+        ], config.completionTimeout)
       }
-    }, parseInt(config.debounce))
+    }, config.debounce)
   })
 
   const completion = async ({ ctx, request, lastContentVersion }) => {
@@ -72,7 +72,7 @@ export const completions = (lsp: Service) => {
           end: { line: request.params.position.line + 1, character: 0 }
         }
       }
-    ], 10000)
+    ], config.completionTimeout)
 
     try {
       var hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
