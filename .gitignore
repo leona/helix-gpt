@@ -177,4 +177,4 @@ helix-gpt.log
 dist/
 
 # Nix
-result/
+result
