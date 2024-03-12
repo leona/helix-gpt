@@ -5,8 +5,6 @@ import assistant from "../models/assistant"
 import { log } from "../utils"
 import config from "../config";
 
-const sendTimeout = parseInt(config.actionTimeout as string);
-
 export const actions = (lsp: Service) => {
   lsp.on(Event.ExecuteCommand, async ({ ctx, request }) => {
     const { command } = request.params
@@ -19,7 +17,7 @@ export const actions = (lsp: Service) => {
         range,
         severity: DiagnosticSeverity.Information
       }
-    ], sendTimeout)
+    ], config.actionTimeout)
 
     const content = ctx.getContentFromRange(range)
     const padding = ctx.getContentPadding(content)
@@ -43,7 +41,7 @@ export const actions = (lsp: Service) => {
         message: e.message,
         severity: DiagnosticSeverity.Error,
         range
-      }], sendTimeout)
+      }], config.actionTimeout)
     }
 
     result = ctx.padContent(result.trim(), padding) + "\n"
