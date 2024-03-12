@@ -12,31 +12,18 @@
             inherit system;
           };
 
-          node_modules = with pkgs; stdenv.mkDerivation {
-            name = "helix-gpt_node_modules";
-            src = ./.;
+          version = (builtins.fromJSON (builtins.readFile ./package.json)).version;
+          node_modules = pkgs.mkYarnModules {
+            pname = "helix-gpt";
+            inherit version;
 
-            dontConfigure = true;
-            dontFixup = true;
-            nativeBuildInputs = [ bun ];
-            impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
-
-            buildPhase = ''
-              bun install --no-progress --frozen-lockfile
-            '';
-
-            installPhase = ''
-              mkdir -p $out/node_modules
-
-              cp -R ./node_modules $out
-            '';
-
-            outputHash = "sha256-y6K5Xq1Q5iK9xiXr4+kQSyDa9kxeYpdhmoBooeXm6hg=";
-            outputHashAlgo = "sha256";
-            outputHashMode = "recursive";
+            packageJSON = ./package.json;
+            yarnLock = ./yarn.lock;
+            yarnNix = ./yarn.nix;
           };
           helix-gpt = with pkgs; stdenv.mkDerivation {
             name = "helix-gpt";
+            inherit version;
             src = ./.;
 
             dontBuild = true;
@@ -75,6 +62,18 @@
           };
         in
         {
+          apps.yarn2nix = {
+            type = "app";
+            program = "${pkgs.writeShellApplication {
+              name = "yarn2nix";
+              runtimeInputs = with pkgs; [bun yarn2nix];
+              text = ''
+                bun install --frozen-lockfile
+                yarn2nix > yarn.nix
+              '';
+            }}/bin/yarn2nix";
+          };
+
           checks.default = helix-gpt;
 
           packages.default = helix-gpt;
