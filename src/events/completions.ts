@@ -105,8 +105,6 @@ export const completions = (lsp: Service) => {
         cleanCharacter += request.params.position.character
       }
 
-      log("TEST", cleanLine, cleanCharacter)
-
       return {
         label: lines[0].length > 20 ? lines[0] : i.slice(0, 20).trim(),
         kind: 1,
