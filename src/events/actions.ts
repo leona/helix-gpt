@@ -3,6 +3,7 @@ import { Event, DiagnosticSeverity } from "../models/lsp.types"
 import { commands } from "../constants"
 import assistant from "../models/assistant"
 import { log } from "../utils"
+import config from "../config";
 
 export const actions = (lsp: Service) => {
   lsp.on(Event.ExecuteCommand, async ({ ctx, request }) => {
@@ -16,7 +17,7 @@ export const actions = (lsp: Service) => {
         range,
         severity: DiagnosticSeverity.Information
       }
-    ], 10000)
+    ], config.actionTimeout)
 
     const content = ctx.getContentFromRange(range)
     const padding = ctx.getContentPadding(content)
@@ -40,7 +41,7 @@ export const actions = (lsp: Service) => {
         message: e.message,
         severity: DiagnosticSeverity.Error,
         range
-      }], 10000)
+      }], config.actionTimeout)
     }
 
     result = ctx.padContent(result.trim(), padding) + "\n"

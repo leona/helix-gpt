@@ -1,4 +1,5 @@
 import { log } from "../utils"
+import config from "../config";
 
 interface Request {
   endpoint: string;
@@ -33,8 +34,7 @@ export default class ApiBase {
   async fetch(
     url: string,
     options: RequestInitTimeout,
-    timeout: number = 10000
-  ): Promise<Response> {
+    timeout: number = config.fetchTimeout): Promise<Response> {
     return new Promise(async (resolve, reject) => {
       setTimeout(() => reject(new Error("timeout")), timeout);
       try {
