@@ -1,7 +1,7 @@
 # helix-gpt
 
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
-![Github Release](https://img.shields.io/badge/release-v0.30-blue)
+![Github Release](https://img.shields.io/badge/release-v0.31-blue)
 
 Code assistant language server for [Helix](https://github.com/helix-editor/helix) with support for Copilot/OpenAI/Codeium.
 
@@ -29,17 +29,17 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.30/helix-gpt-0.30-x86_64-linux.tar.gz \
+wget https://github.com/leona/helix-gpt/releases/download/0.31/helix-gpt-0.31-x86_64-linux.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.30-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.31-x86_64-linux /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 
 #### With Bun (tested with 1.0.25)
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.30/helix-gpt-0.30.js -O /usr/bin/helix-gpt
+wget https://github.com/leona/helix-gpt/releases/download/0.31/helix-gpt-0.31.js -O /usr/bin/helix-gpt
 ```
 
 ### Configuration
