@@ -1,6 +1,7 @@
 export const context = {
   openai: `Continue the input code from the language <languageId>. Only respond with code.`,
-  copilot: `<languageId> completions. Only respond with code.`
+  copilot: `<languageId> completions. Only respond with code.`,
+  ollama: `Continue the input code from the language <languageId>. Only respond with code.`
 }
 
 export const examples = [
