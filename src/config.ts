@@ -79,7 +79,7 @@ const { values } = parseArgs({
     completionTimeout: {
       type: 'string',
       default: Bun.env.COMPLETION_TIMEOUT ?? "10000"
-    }
+    },
     ollamaEndpoint: {
       type: 'string',
       // use 127.0.0.1 instead of localhost for issue with bun
