@@ -86,7 +86,7 @@ export const completions = (lsp: Service) => {
             end: { line: request.params.position.line + 1, character: 0 }
           }
         }
-      ], 10000)
+      ], config.completionTimeout)
     }
 
     log("completion hints:", hints)
