@@ -12,31 +12,44 @@
             inherit system;
           };
 
-          helix-gpt = pkgs.callPackage ./package.nix { };
+          package = pkgs.callPackage ./package.nix { };
+
+          yarn2nix = pkgs.writeShellApplication {
+            name = "yarn2nix";
+            runtimeInputs = [
+              pkgs.bun
+              pkgs.yarn2nix
+            ];
+            text = ''
+              bun install --frozen-lockfile
+              yarn2nix > yarn.nix
+            '';
+          };
         in
         {
-          apps.yarn2nix = with pkgs; {
-            type = "app";
-            program = "${writeShellApplication {
-              name = "yarn2nix";
-              runtimeInputs = [
-                bun 
-                yarn2nix
-              ];
-              text = ''
-                bun install --frozen-lockfile
-                yarn2nix > yarn.nix
-              '';
-            }}/bin/yarn2nix";
+          apps =
+            let
+              app = {
+                type = "app";
+                program = "${package}/bin/helix-gpt";
+              };
+            in
+            {
+              helix-gpt = app;
+              default = app;
+            };
+
+          checks.default = package;
+
+          packages = {
+            helix-gpt = package;
+            default = package;
           };
-
-          checks.default = helix-gpt;
-
-          packages.default = helix-gpt;
 
           devShells.default = with pkgs; mkShell {
             packages = [
               bun
+              # This is the wrapped flake yarn2nix
               yarn2nix
             ];
           };
