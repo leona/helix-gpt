@@ -9,7 +9,7 @@ let
   version = (builtins.fromJSON (builtins.readFile ./package.json)).version;
 
   node_modules = mkYarnModules {
-    pname = "helix-gpt_${version}";
+    pname = "helix-gpt";
     inherit version;
 
     packageJSON = ./package.json;
@@ -18,7 +18,7 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "helix-gpt_${version}";
+  name = "helix-gpt";
   inherit version;
   src = ./.;
 
