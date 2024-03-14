@@ -77,83 +77,32 @@ To fetch your Copilot token.
 
 ### With Nix
 
-This Nix Flake provides the necessary configuration to set up helix-gpt along with some additional utilities.
-
-#### Prerequisites
-
-- [Nix](https://nixos.org/download.html)
-- [Flake](https://nixos.wiki/wiki/Flakes)
-
 #### Usage
 
-To use this flake in your configuration, add it as an input in your `flake.nix`:
+To build it:
+
+```bash
+nix build .
+```
+
+To run it:
+
+```bash
+nix run github:leona/helix-gpt
+```
+
+To use this flake in your own flake, add it as an input in your `flake.nix`:
 
 ```nix
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs";
-    helix-gpt.url = "github:<repository-url>";
+    helix-gpt.url = "github:leona/helix-gpt";
   };
 
   outputs = { nixpkgs, helix-gpt }: {
     devShells.default = pkgs.mkShell {
         packages = [helix-gpt.packages.default];
-    };
-  };
-}
-```
-
-#### Outputs
-
-#### `apps.yarn2nix`
-
-This output provides the `yarn2nix` application along with its dependencies. It generates a `yarn.nix` file from your `yarn.lock` file.
-
-To use it:
-
-```bash
-nix run .#yarn2nix
-```
-
-#### `checks.default`
-
-This output includes checks for helix-gpt. You can run these checks to ensure helix-gpt is functioning correctly.
-```bash
-nix flake check
-```
-
-#### `packages.default`
-
-This output provides the helix-gpt package.
-```bash
-nix build
-```
-Then you can run ./result/bin/helix-gpt.
-
-#### `devShells.default`
-
-This output sets up a development shell with the required dependencies for Helix GPT development.
-```bash
-nix develop
-```
-
-#### Overlays
-
-This flake includes an overlay for helix-gpt. To use this in your configuration.
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
-    helix-gpt.url = "github:<repository-url>";
-  };
-
-  outputs = { self, nixpkgs, helix-gpt }: {
-    pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-            helix-gpt.overlays.default
-        ];
     };
   };
 }
