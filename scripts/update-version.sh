@@ -6,19 +6,14 @@ run_npm_version() {
   npm version "$1" --no-git-tag-version || exit 1
 }
 
-# Check if the version is major, minor or patch
-if [[ $VERSION =~ ^(major|minor|patch)$ ]]; then
-  true
 # Check if the version is in format 0-9
-elif [[ $VERSION =~ ^[0-9]+$ ]]; then
+if [[ $VERSION =~ ^[0-9]+$ ]]; then
   VERSION="$VERSION.0.0"
 # Check if the version is in format 0-9.0-9
 elif [[ $VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
   VERSION="$VERSION.0"
-# Check if the version is in format 0-9.0-9.0-9
-elif [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  true
-else
+# Verify that the version has the format of major|minor|patch or 0-9.0-9.0-9
+elif [[ ! $VERSION =~ ^(major|minor|patch|[0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
   echo "Invalid version format."
   echo "  major|minor|patch"
   echo "  x|x.x|x.x.x (e.g. 1, 1.1 or 1.0.1)"
