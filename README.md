@@ -1,3 +1,9 @@
+# Fork
+
+Adds support for deno, the codebase now works with deno and bun at the same time
+
+To run with deno `deno run --allow-env --allow-net src/app.ts --handler codeium`
+
 # helix-gpt
 
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
