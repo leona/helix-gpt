@@ -1,4 +1,4 @@
-import { uniqueStringArray, extractCodeBlock, log } from "../utils";
+import { uniqueStringArray, extractCodeBlock, log } from "../utils.ts";
 
 export class Completion extends Array<string> {
   constructor(...items: string[]) {

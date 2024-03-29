@@ -10,8 +10,8 @@ import codeiumAuth from "./models/codeium-auth.ts";
 import Github from "./providers/github.ts";
 import Openai from "./providers/openai.ts";
 import Codeium from "./providers/codeium.ts";
+import Ollama from "./providers/ollama.ts"
 import process from "node:process";
-import Ollama from "./providers/ollama"
 
 
 if (config.authCopilot) {
