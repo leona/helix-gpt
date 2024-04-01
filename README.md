@@ -2,7 +2,22 @@
 
 Adds support for deno, the codebase now works with deno and bun at the same time
 
-To run with deno `deno run --allow-env --allow-net src/app.ts --handler codeium`
+**Usage:**
+
+The fork have tags that follows upstream but with `-deno` suffix, for example `0.31-deno`
+
+To run with deno
+
+```
+deno run --allow-env --allow-net https://raw.githubusercontent.com/sigmaSd/helix-gpt/0.31-deno/src/app.ts  --handler codeium` # make sure to use the latest deno tag
+```
+
+To compile to a standalone executable
+
+```
+deno compile --output helix-gpt --no-check --allow-env --allow-net https://raw.githubusercontent.com/sigmaSd/helix-gpt/0.31-deno/src/app.ts # make sure to use the latest deno tag
+```
+
 
 # helix-gpt
 
