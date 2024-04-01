@@ -18,6 +18,16 @@ To compile to a standalone executable
 deno compile --output helix-gpt --no-check --allow-env --allow-net https://raw.githubusercontent.com/sigmaSd/helix-gpt/0.31-deno/src/app.ts # make sure to use the latest deno tag
 ```
 
+Example of helix configuration
+
+```toml
+[language-server.gpt]
+command = "deno"
+args = ["run", "--allow-net","--allow-env", "https://raw.githubusercontent.com/sigmaSd/helix-gpt/0.31-deno/src/app.ts"]
+# HANDLER can be set to openai/copilot/codeium
+environment = { HANDLER= "codeium" }
+```
+
 
 # helix-gpt
 
