@@ -24,11 +24,13 @@ export default class ApiBase {
   private url: string;
   private headers: Record<string, string>;
   private params: Record<string, string>;
+  private controller: AbortController;
 
   constructor({ url, headers, params }: ApiBaseOptions) {
     this.url = url;
     this.headers = headers || {};
     this.params = params || {};
+    this.controller = new AbortController();
   }
 
   async fetch(
@@ -61,6 +63,10 @@ export default class ApiBase {
       requestUrl.searchParams.append(key, this.params[key]);
     });
 
+    // cancel last pending request
+    this.controller.abort();
+    this.controller = new AbortController();
+
     let opts = {
       headers: {
         ...this.headers,
@@ -68,6 +74,7 @@ export default class ApiBase {
       },
       method,
       body: null as any,
+      signal: this.controller.signal
     };
 
     if (body) {
