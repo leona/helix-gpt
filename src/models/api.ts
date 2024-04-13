@@ -38,7 +38,11 @@ export default class ApiBase {
     options: RequestInitTimeout,
     timeout: number = config.fetchTimeout): Promise<Response> {
     return new Promise(async (resolve, reject) => {
-      setTimeout(() => reject(new Error("timeout")), timeout);
+      setTimeout(() => {
+        this.controller.abort()
+        reject(new Error("timeout"))
+      }, timeout);
+
       try {
         const response = await fetch(url, options);
         resolve(response);
