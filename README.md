@@ -2,6 +2,8 @@
 
 Adds support for deno, the codebase now works with deno and bun at the same time
 
+Requires Deno version 1.42.3 or higher
+
 **Usage:**
 
 The fork have tags that follows upstream but with `-deno` suffix, for example `0.31-deno`
