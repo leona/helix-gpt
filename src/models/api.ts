@@ -46,7 +46,8 @@ export default class ApiBase {
       try {
         const response = await fetch(url, options);
         resolve(response);
-      } catch (error) {
+      } catch (error: any) {
+        if (error.name === "AbortError") reject({ message: "" });
         reject(error);
       }
     });
