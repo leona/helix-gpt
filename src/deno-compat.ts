@@ -15,7 +15,7 @@ function injectDenoComapt() {
 class Bun {
   argv: string[];
   env: Record<string, string>;
-  stdin: { stream: () => any; };
+  stdin: { stream: () => ReadableStream<Uint8Array>; };
 
   constructor() {
     this.argv = Deno.args;
