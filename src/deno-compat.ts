@@ -1,8 +1,9 @@
 import { Buffer } from "node:buffer"
 
+const Deno = (globalThis as any).Deno
+
 export function runningInDeno(): boolean {
-  //@ts-ignore ok
-  return Boolean(globalThis.Deno)
+  return Boolean(Deno)
 }
 
 function injectDenoComapt() {
@@ -17,10 +18,10 @@ class Bun {
   stdin: { stream: () => any; };
 
   constructor() {
-    this.argv = globalThis.Deno.args;
+    this.argv = Deno.args;
     this.env = new Proxy({}, {
       get: (_target, property: string) => {
-        return globalThis.Deno.env.get(property);
+        return Deno.env.get(property);
       },
     });
     this.stdin = {
