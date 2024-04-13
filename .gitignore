@@ -170,6 +170,9 @@ out
 # IntelliJ based IDEs
 .idea
 
+# Helix config
+.helix
+
 # Finder (MacOS) folder config
 .DS_Store
 
