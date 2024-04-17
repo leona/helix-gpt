@@ -47,6 +47,7 @@ export default class ApiBase {
         const response = await fetch(url, options);
         resolve(response);
       } catch (error: any) {
+        // we canceled the request on purpose beasue there is a new one, so no need to tell the user
         if (error.name === "AbortError") reject({ message: "" });
         reject(error);
       }
