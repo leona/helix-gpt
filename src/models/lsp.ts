@@ -41,7 +41,6 @@ export class Service {
       }
 
       this.currentUri = uri
-      log("received didOpen", `language: ${languageId}`)
     })
 
     this.on(Event.Shutdown, () => {
@@ -53,7 +52,6 @@ export class Service {
       const { uri, version } = request.params.textDocument
       this.buffers[uri] = { ...this.buffers[uri], version, text: request.params.contentChanges[0].text }
       this.currentUri = uri
-      log("received didChange", `language: ${this.buffers[uri].languageId}`, `contentVersion: ${version}`, `uri: ${uri}`)
     })
   }
 
@@ -132,7 +130,6 @@ export class Service {
     })
 
     console.log(`Content-Length: ${request.length}\r\n\r\n${request}`)
-    log("sent request", request)
   }
 
   sendDiagnostics(diagnostics: Diagnostic[], timeout: number = 0) {
@@ -191,7 +188,6 @@ export class Service {
       const request = this.parseLine(line)
 
       if (![Event.DidChange, Event.DidOpen].includes(request.method)) {
-        log("received request:", JSON.stringify(request))
       }
 
       this.emitter.emit(request.method, request)

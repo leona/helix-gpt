@@ -1,4 +1,4 @@
-import { currentUnixTimestamp, genHexStr } from "../utils.ts";
+import { currentUnixTimestamp, genHexStr, log } from "../utils.ts";
 import ApiBase from "../models/api.ts";
 import * as types from "./github.types.ts";
 import config from "../config.ts";
@@ -118,7 +118,7 @@ export default class Github extends ApiBase {
     return types.Chat.fromResponse(data, filepath, languageId)
   }
 
-  async completion(contents: any, filepath: string, languageId: string, suggestions = 3): Promise<types.Completion> {
+  async completion(contents: any, filepath: string, languageId: string, suggestions = 1): Promise<types.Completion> {
     await this.refreshCopilotSession()
 
     const headers = {

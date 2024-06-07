@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test";
+import { expect, test, } from "node:test";
 import { extractCodeBlock, parseQuery, getContent } from "./utils"
 
 test("extractCodeBlock", async () => {

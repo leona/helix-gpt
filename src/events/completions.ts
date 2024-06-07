@@ -10,12 +10,11 @@ export const completions = (lsp: Service) => {
     const lastContentVersion = buffer.version
     const { lastCharacter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
 
-    if (lastCharacter == ".") {
+    if (!config.triggerCharacters.includes(lastCharacter)) {
       return ctx.send({
         id: request.id,
         result: {
           isIncomplete: false,
-          items: []
         }
       })
     }
@@ -25,16 +24,22 @@ export const completions = (lsp: Service) => {
         await completion({ ctx, request, lastContentVersion })
       } catch (e) {
         log("error in completion event", e.message)
-        ctx.sendDiagnostics([
-          {
-            message: e.message,
-            severity: DiagnosticSeverity.Error,
-            range: {
-              start: { line: request.params.position.line, character: 0 },
-              end: { line: request.params.position.line + 1, character: 0 }
-            }
+        // ctx.sendDiagnostics([
+        //   {
+        //     message: e.message,
+        //     severity: DiagnosticSeverity.Error,
+        //     range: {
+        //       start: { line: request.params.position.line, character: 0 },
+        //       end: { line: request.params.position.line + 1, character: 0 }
+        //     }
+        //   }
+        // ], config.completionTimeout)
+        ctx.send({
+          id: request.id,
+          result: {
+            isIncomplete: false,
           }
-        ], config.completionTimeout)
+        })
       }
     }, config.debounce)
   })
@@ -53,7 +58,6 @@ export const completions = (lsp: Service) => {
     }
 
     const buffer = ctx.buffers[request.params.textDocument.uri]
-    log("running completion on buffer", JSON.stringify(buffer))
 
     if (buffer.version > lastContentVersion) {
       log("skipping because content is stale")
@@ -61,7 +65,6 @@ export const completions = (lsp: Service) => {
     }
 
     const { lastLine, contentBefore, contentAfter, contentImmediatelyAfter } = await getContent(buffer.text, request.params.position.line, request.params.position.character)
-    log("calling completion event")
 
     ctx.sendDiagnostics([
       {
@@ -74,10 +77,11 @@ export const completions = (lsp: Service) => {
       }
     ], config.completionTimeout)
 
+    let hints = []
     try {
-      var hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
+      hints = await assistant.completion({ contentBefore, contentAfter }, ctx.currentUri, buffer?.languageId)
     } catch (e) {
-      return ctx.sendDiagnostics([
+      ctx.sendDiagnostics([
         {
           message: e.message,
           severity: DiagnosticSeverity.Error,
@@ -87,9 +91,9 @@ export const completions = (lsp: Service) => {
           }
         }
       ], config.completionTimeout)
+      skip()
+      return []
     }
-
-    log("completion hints:", hints)
 
     const items = hints?.map((i: string) => {
       i = i.trim()

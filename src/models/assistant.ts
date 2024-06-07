@@ -36,7 +36,6 @@ const chat = async (...args: any[]) => {
 }
 
 const completion = async (...args: any[]) => {
-  log(config.handler, "completion request")
   const provider = getProvider(config.handler)
 
   if (!provider.completion) {

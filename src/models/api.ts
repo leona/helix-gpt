@@ -57,7 +57,6 @@ export default class ApiBase {
   async request(request: Request): Promise<any> {
     const { endpoint, method, body, headers, params, url, timeout } = request;
     let requestUrl = new URL(endpoint, url || this.url);
-    log("fetch", endpoint)
 
     if (params) {
       Object.keys(params).forEach((key) =>
@@ -95,8 +94,6 @@ export default class ApiBase {
         `Fetch failed with status ${response.status} body ${error} url: ${request.endpoint}`
       );
     }
-
-    log("response", requestUrl, response.status)
 
     if (request.text) {
       return await response.text();
