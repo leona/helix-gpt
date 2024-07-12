@@ -24,11 +24,13 @@ export default class ApiBase {
   private url: string;
   private headers: Record<string, string>;
   private params: Record<string, string>;
+  private controller: AbortController;
 
   constructor({ url, headers, params }: ApiBaseOptions) {
     this.url = url;
     this.headers = headers || {};
     this.params = params || {};
+    this.controller = new AbortController();
   }
 
   async fetch(
@@ -36,11 +38,17 @@ export default class ApiBase {
     options: RequestInitTimeout,
     timeout: number = config.fetchTimeout): Promise<Response> {
     return new Promise(async (resolve, reject) => {
-      setTimeout(() => reject(new Error("timeout")), timeout);
+      setTimeout(() => {
+        this.controller.abort()
+        reject(new Error("timeout"))
+      }, timeout);
+
       try {
         const response = await fetch(url, options);
         resolve(response);
-      } catch (error) {
+      } catch (error: any) {
+        // we canceled the request on purpose beasue there is a new one, so no need to tell the user
+        if (error.name === "AbortError") reject({ message: "" });
         reject(error);
       }
     });
@@ -61,6 +69,10 @@ export default class ApiBase {
       requestUrl.searchParams.append(key, this.params[key]);
     });
 
+    // cancel last pending request
+    this.controller.abort();
+    this.controller = new AbortController();
+
     let opts = {
       headers: {
         ...this.headers,
@@ -68,6 +80,7 @@ export default class ApiBase {
       },
       method,
       body: null as any,
+      signal: this.controller.signal
     };
 
     if (body) {
