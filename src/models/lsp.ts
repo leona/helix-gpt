@@ -130,7 +130,7 @@ export class Service {
     })
 
     const len = (new TextEncoder()).encode(request).length
-    console.log(`Content-Length: ${len}\r\n\r\n${request}`)
+    process.stdout.write(`Content-Length: ${len}\r\n\r\n${request}`)
     log("sent request", request)
   }
 
