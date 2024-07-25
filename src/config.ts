@@ -98,6 +98,10 @@ const { values } = parseArgs({
       type: 'string',
       default: Bun.env.OLLAMA_TIMEOUT ?? '60000',
     },
+    codyToken: {
+      type: "string",
+      default: Bun.env.CODY_TOKEN,
+    }
   },
   strict: true,
   allowPositionals: true,
@@ -107,8 +111,10 @@ if (
   !Bun.env.TEST_RUNNER?.length &&
   !values.openaiKey?.length &&
   !values.copilotApiKey?.length &&
+  !values.codyToken?.length &&
   !values.authCopilot &&
   !values.authCodeium &&
+
   values.handler !== "codeium" &&
   values.handler !== "ollama"
 ) {
