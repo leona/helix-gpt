@@ -22,10 +22,9 @@ export class Service {
       log("lsp-event-emitter error", e.message)
     })
 
-    this.on(Event.Initialize, async ({ ctx }) => {
+    this.on(Event.Initialize, async ({ ctx, request }) => {
       ctx.send({
-        method: Event.Initialize,
-        id: 0,
+        id: request.id,
         result: {
           capabilities: this.capabilities
         }
@@ -130,7 +129,8 @@ export class Service {
       params
     })
 
-    console.log(`Content-Length: ${request.length}\r\n\r\n${request}`)
+    const len = (new TextEncoder()).encode(request).length
+    process.stdout.write(`Content-Length: ${len}\r\n\r\n${request}`)
     log("sent request", request)
   }
 
