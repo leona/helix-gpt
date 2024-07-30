@@ -11,7 +11,7 @@ export default class Github extends ApiBase {
     super({
       url: 'https://github.com',
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       }
     })
   }
