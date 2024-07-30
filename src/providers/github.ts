@@ -11,7 +11,7 @@ export default class Github extends ApiBase {
     super({
       url: 'https://github.com',
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       }
     })
   }
@@ -55,7 +55,10 @@ export default class Github extends ApiBase {
       url: "https://api.github.com",
       endpoint: "/copilot_internal/v2/token",
       headers: {
-        Authorization: `Bearer ${config.copilotApiKey}`
+        Authorization: `Bearer ${config.copilotApiKey}`,
+        "Editor-Version": "helix/1.0.0",
+        "Editor-Plugin-Version": "helix-gpt/1.0.0",
+        "User-Agent": "helix/1.0.0",
       }
     })
 
@@ -93,10 +96,10 @@ export default class Github extends ApiBase {
 
     const headers = {
       "Content-Type": "application/json; charset=utf-8",
-      "User-Agent": "GitHubCopilotChat/0.8.0",
+      "User-Agent": "helix/1.0.0",
       "Authorization": `Bearer ${this.copilotSession?.raw}`,
-      "Editor-Plugin-Version": "copilot-chat/0.8.0",
-      "Editor-Version": "vscode/1.83.1",
+      "Editor-Plugin-Version": "helix-gpt/1.0.0",
+      "Editor-Version": "helix/1.0.0",
       "Openai-Intent": "conversation-panel",
       "Openai-Organization": "github-copilot",
       "VScode-MachineId": genHexStr(64),
@@ -123,10 +126,10 @@ export default class Github extends ApiBase {
 
     const headers = {
       "Content-Type": "application/json; charset=utf-8",
-      "User-Agent": "GithubCopilot/1.155.0",
+      "User-Agent": "helix/1.0.0",
       "Authorization": `Bearer ${this.copilotSession?.raw}`,
-      "Editor-Plugin-Version": "copilot/1.155.0",
-      "Editor-Version": "vscode/1.85.1",
+      "Editor-Plugin-Version": "helix-gpt/1.0.0",
+      "Editor-Version": "helix/1.0.0",
       "Openai-Intent": "copilot-ghost",
       "Openai-Organization": "github-copilot",
       "VScode-MachineId": genHexStr(64),
