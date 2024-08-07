@@ -1,1 +1,4 @@
 smol = true
+
+[install.lockfile]
+print = "yarn"

@@ -175,3 +175,6 @@ out
 
 helix-gpt.log
 dist/
+
+# Nix
+result
