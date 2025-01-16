@@ -1,7 +1,7 @@
 import { uuid } from "../utils";
-import ApiBase from "../models/api"
-import * as types from "./codeium.types"
-import config from "../config"
+import ApiBase from "../models/api";
+import * as types from "./codeium.types";
+import config from "../config";
 
 const languages = {
   unspecified: 0,
@@ -73,88 +73,91 @@ const languages = {
 };
 
 export default class Codeium extends ApiBase {
-
-  sessionId: string
-  apiKey: string
+  sessionId: string;
+  apiKey: string;
 
   constructor(apiKey: string = config.codeiumApiKey as string) {
     super({
-      url: 'https://web-backend.codeium.com',
+      url: "https://web-backend.codeium.com",
       headers: {
-        "Content-Type": "application/json"
-      }
-    })
+        "Content-Type": "application/json",
+      },
+    });
 
-    this.sessionId = uuid()
-    this.apiKey = apiKey
+    this.sessionId = uuid();
+    this.apiKey = apiKey;
   }
 
   authUrl(): string {
-    return `https://codeium.com/profile?response_type=token&redirect_uri=vim-show-auth-token&state=${this.sessionId}&scope=openid%20profile%20email&redirect_parameters_type=query`
+    return `https://codeium.com/profile?response_type=token&redirect_uri=vim-show-auth-token&state=${this.sessionId}&scope=openid%20profile%20email&redirect_parameters_type=query`;
   }
 
   async register(token: string): Promise<string> {
     const headers = {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    };
 
     const body = {
       firebase_id_token: token,
-    }
+    };
 
     const data = await this.request({
       method: "POST",
       headers,
       url: "https://api.codeium.com",
       endpoint: "/register_user/",
-      body
-    })
+      body,
+    });
 
-    return data?.api_key
+    return data?.api_key;
   }
 
-  async completion(contents: any, filepath: string, languageId: string, suggestions = 3): Promise<types.Completion> {
+  async completion(
+    contents: any,
+    filepath: string,
+    languageId: string,
+  ): Promise<types.Completion> {
     const headers = {
       "Content-Type": "application/json",
-      "Authorization": `Basic ${this.apiKey}-${this.sessionId}`
-    }
+      Authorization: `Basic ${this.apiKey}-${this.sessionId}`,
+    };
 
-    filepath = filepath.replace('file://', '')
+    filepath = filepath.replace("file://", "");
 
     const body = {
-      "metadata": {
+      metadata: {
         // The editor name needs to be known by codeium
-        "ideName": "web",
-        "ideVersion": "unknown",
+        ideName: "web",
+        ideVersion: "unknown",
         // The version needs to a recent one, so codeium accepts it
-        "extensionVersion": "1.6.13",
-        "extensionName": "helix-gpt",
-        "apiKey": this.apiKey,
-        "sessionId": this.sessionId
+        extensionVersion: "1.6.13",
+        extensionName: "helix-gpt",
+        apiKey: this.apiKey,
+        sessionId: this.sessionId,
       },
-      "document": {
-        "editor_language": languageId,
-        "language": languages[languageId] as number,
-        "cursor_offset": contents.contentBefore.length,
-        "line_ending": "\n",
-        "absolute_path": filepath,
-        "relative_path": filepath,
-        "text": contents.contentBefore + "\n" + + contents.contentAfter
+      document: {
+        editor_language: languageId,
+        language: languages[languageId] as number,
+        cursor_offset: contents.contentBefore.length,
+        line_ending: "\n",
+        absolute_path: filepath,
+        relative_path: filepath,
+        text: contents.contentBefore + "\n" + contents.contentAfter,
       },
-      "editor_options": {
-        "tab_size": 2,
-        "insert_spaces": true
+      editor_options: {
+        tab_size: 2,
+        insert_spaces: true,
       },
-      "other_documents": []
-    }
+      other_documents: [],
+    };
 
     const data = await this.request({
       method: "POST",
       body,
       headers,
-      endpoint: "/exa.language_server_pb.LanguageServerService/GetCompletions"
-    })
+      endpoint: "/exa.language_server_pb.LanguageServerService/GetCompletions",
+    });
 
-    return types.Completion.fromResponse(data).slice(0, suggestions)
+    return types.Completion.fromResponse(data).slice(0, config.numSuggestions);
   }
 }
