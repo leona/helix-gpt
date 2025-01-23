@@ -4,19 +4,23 @@ on:
     inputs:
       tag:
         type: string
-        description: What is the release tag?
-        required: true
+        description: Specify the tag
+          - major|minor|patch
+          - x|x.x|x.x.x
+        default: patch
 jobs:
   build:
-    name: build
+    name: Build
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.update-version.outputs.version }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
           fetch-tags: true
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN || github.token }}
 
       - uses: oven-sh/setup-bun@v1
         with:
@@ -33,11 +37,19 @@ jobs:
 
       - name: Build smol
         run: bun run build:smol
-        
+
+      - name: Update version
+        id: update-version
+        run: |
+          VERSION=$(./scripts/update-version.sh ${{ github.event.inputs.tag }})
+          echo "VERSION=${VERSION:1}" >> $GITHUB_ENV
+          echo "version=${VERSION:1}" >> $GITHUB_OUTPUT
+          git add package.json
+
       - name: Set release
         shell: bash
         run: |
-          export VERSION="${{ github.event.inputs.tag }}"
+          export VERSION="${{ env.VERSION }}"
           export ARCH=x86_64-linux
           export APP=helix-gpt
           export OUTPUT="$APP-$VERSION-$ARCH"
@@ -49,14 +61,17 @@ jobs:
         run: |
           git config --global user.name "Leon"
           git config --global user.email "leon@nx.ie"
-          sed -e 's/<release-version>/${{ github.event.inputs.tag }}/g' assets/template.md > README.md
+
+          # Create README.md with version
+          sed -e 's/<release-version>/${{ env.VERSION }}/g' assets/template.md > README.md
           git add README.md
-          git commit -m 'release: version ${{ github.event.inputs.tag }}'
-          git push origin master
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+          git commit -m 'release: version ${{ env.VERSION }}'
+          git push origin ${{ github.ref_name }}
+          latest_tag=$(git describe --always --tags `git rev-list --tags --max-count=1`)
           messages=$(git log $latest_tag..HEAD --pretty=format:"%h - %s")
-          git tag -m "$messages" -a ${{ github.event.inputs.tag }}
-          git push origin ${{ github.event.inputs.tag }} 
+          git tag -m "$messages" -a ${{ env.VERSION }}
+          git push origin ${{ env.VERSION }} 
           
       - uses: actions/upload-artifact@v4
         if: vars.RUNNER != 'act'
@@ -68,6 +83,8 @@ jobs:
     name: Publish
     needs: [build]
     runs-on: ubuntu-latest
+    env:
+        VERSION: ${{ needs.build.outputs.version }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -95,18 +112,18 @@ jobs:
             tar -C `dirname $bin` -czvf dist/$filename.tar.gz --transform 's,^.*/,,g' `basename $bin`
           done
 
-          tar -czvf dist/helix-gpt-${{ github.event.inputs.tag }}-source.tar.gz -C $source .
+          tar -czvf dist/helix-gpt-${{ env.VERSION }}-source.tar.gz -C $source .
           mv dist $source/
           
       - name: Upload binaries to release
         if: vars.RUNNER != 'act'
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GH_TOKEN }}
+          repo_token: ${{ secrets.GH_TOKEN || github.token }}
           file: dist/*
           file_glob: true
-          tag: ${{ github.event.inputs.tag }}
-          release_name: "${{ github.event.inputs.tag }}"
+          tag: ${{ env.VERSION }}
+          release_name: "${{ env.VERSION }}"
           overwrite: true
       
       - name: Upload binaries as artifact
