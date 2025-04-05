@@ -6,7 +6,7 @@ const { values } = parseArgs({
   options: {
     numSuggestions: {
       type: "string",
-      default: "1",
+      default: "2",
     },
     logFile: {
       type: "string",
