@@ -78,7 +78,7 @@ export default class Github extends ApiBase {
       model: config.openaiModel,
       max_tokens: parseInt(config.openaiMaxTokens as string),
       n: config.numSuggestions,
-      temperature: suggestions > 1 ? 0.4 : 0,
+      temperature: config.numSuggestions > 1 ? 0.4 : 0,
       top_p: 1,
       frequency_penalty: 1,
       presence_penalty: 2,
