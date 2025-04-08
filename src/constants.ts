@@ -22,27 +22,27 @@ export const examples = [
 export const commands = [
   {
     key: "resolveDiagnostics",
-    label: "Resolve diagnostics",
-    query: "Resolve the diagnostics for this code."
+    label: "✨ Resolve diagnostics",
+    query: "Resolve the diagnostics for this code.",
   },
   {
     key: "generateDocs",
-    label: "Generate documentation",
-    query: "Add documentation to this code."
+    label: "✨ Generate documentation",
+    query: "Add documentation to this code.",
   },
   {
     key: "improveCode",
-    label: "Improve code",
-    query: "Improve this code."
+    label: "✨ Improve code",
+    query: "Improve this code.",
   },
   {
     key: "refactorFromComment",
-    label: "Refactor code from a comment",
-    query: "Refactor this code based on the comment."
+    label: "✨ Refactor code from a comment",
+    query: "Refactor this code based on the comment.",
   },
   {
     key: "writeTest",
-    label: "Write a unit test",
+    label: "✨ Write a unit test",
     query: "Write a unit test for this code. Do not include any imports.",
   }
 ]
