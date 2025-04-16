@@ -210,8 +210,8 @@ export default class Github extends ApiBase {
       body,
       headers,
       text: true,
-      url: "https://copilot-proxy.githubusercontent.com",
-      endpoint: "/v1/engines/copilot-codex/completions",
+      url: "https://proxy.individual.githubcopilot.com",
+      endpoint: "/v1/engines/gpt-4o-copilot/completions",
     });
 
     return types.Completion.fromResponse(data);
