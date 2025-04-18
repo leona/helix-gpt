@@ -75,6 +75,39 @@ helix-gpt --authCopilot
 
 To fetch your Copilot token.
 
+### With Nix
+
+#### Usage
+
+To build it:
+
+```bash
+nix build .
+```
+
+To run it:
+
+```bash
+nix run github:leona/helix-gpt
+```
+
+To use this flake in your own flake, add it as an input in your `flake.nix`:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs";
+    helix-gpt.url = "github:leona/helix-gpt";
+  };
+
+  outputs = { nixpkgs, helix-gpt }: {
+    devShells.default = pkgs.mkShell {
+        packages = [helix-gpt.packages.default];
+    };
+  };
+}
+```
+
 ### Helix Configuration
 
 Example for TypeScript `.helix/languages.toml` tested with Helix 23.10 (older versions may not support multiple LSPs)
