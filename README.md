@@ -42,6 +42,14 @@ wget https://github.com/leona/helix-gpt/releases/download/0.34/helix-gpt-0.34-x8
 wget https://github.com/leona/helix-gpt/releases/download/0.34/helix-gpt-0.34.js -O /usr/bin/helix-gpt
 ```
 
+#### AUR
+
+```bash
+yay -S helix-gpt-bin
+# or
+paru -S helix-gpt-bin
+```
+
 ### Configuration
 
 You can configure helix-gpt by exposing either the environment variables below, or by passing the command line options directly to helix-gpt in the Helix configuration step.
