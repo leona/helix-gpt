@@ -29,10 +29,11 @@ This was made to run with [Bun](https://bun.sh/), but you can also use a precomp
 #### Without Bun
 
 ```bash
-wget https://github.com/leona/helix-gpt/releases/download/0.34/helix-gpt-0.34-x86_64-linux.tar.gz \
+export ARCH=x86_64-linux # arm64-darwin for MacOS
+wget https://github.com/leona/helix-gpt/releases/download/0.34/helix-gpt-0.34-${ARCH}.tar.gz \
 -O /tmp/helix-gpt.tar.gz \
 && tar -zxvf /tmp/helix-gpt.tar.gz \
-&& mv helix-gpt-0.34-x86_64-linux /usr/bin/helix-gpt \
+&& mv helix-gpt-0.34-${ARCH} /usr/bin/helix-gpt \
 && chmod +x /usr/bin/helix-gpt
 ```
 

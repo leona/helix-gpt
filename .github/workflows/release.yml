@@ -9,7 +9,16 @@ on:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64-linux
+          - os: macos-latest
+            arch: arm64-darwin
+
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -33,12 +42,12 @@ jobs:
 
       - name: Build smol
         run: bun run build:smol
-        
+
       - name: Set release
         shell: bash
         run: |
           export VERSION="${{ github.event.inputs.tag }}"
-          export ARCH=x86_64-linux
+          export ARCH=${{ matrix.arch }}
           export APP=helix-gpt
           export OUTPUT="$APP-$VERSION-$ARCH"
 

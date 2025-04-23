@@ -8,6 +8,10 @@ const { values } = parseArgs({
       type: "string",
       default: "2",
     },
+   suggestions: {
+      type: "string",
+      default: "0",
+    },
     logFile: {
       type: "string",
       default: Bun.env.LOG_FILE ?? "",
@@ -134,4 +138,5 @@ export default {
   actionTimeout: parseInt(values.actionTimeout as string),
   completionTimeout: parseInt(values.completionTimeout as string),
   numSuggestions: parseInt(values.numSuggestions as string),
+  suggestions: parseInt(values.suggestions as string),
 };
