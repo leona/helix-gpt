@@ -13,7 +13,6 @@ export const completions = (lsp: Service) => {
       request.params.position.line,
       request.params.position.character,
     );
-
     if (lastCharacter == ".") {
       return ctx.send({
         id: request.id,

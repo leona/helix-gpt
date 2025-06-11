@@ -173,38 +173,98 @@ export class Service {
     })
   }
 
-  parseLine(line: string) {
-    const components = line.split('\r\n')
-
-    for (const data of components) {
-      try {
-        return JSON.parse(data)
-      } catch (e) { }
+  async emitRequest(request: Object) {
+    if (![Event.DidChange, Event.DidOpen].includes(request.method)) {
+      log("received request:", JSON.stringify(request))
     }
-
-    throw new Error("failed to parse")
+    this.emitter.emit(request.method, request)
   }
-
-  async receiveLine(line: string) {
-    try {
-      const request = this.parseLine(line)
-
-      if (![Event.DidChange, Event.DidOpen].includes(request.method)) {
-        log("received request:", JSON.stringify(request))
-      }
-
-      this.emitter.emit(request.method, request)
-    } catch (e) {
-      log("failed to parse line:", e.message, line)
-    }
-  }
-
 
   async start() {
+    const parser = new Parser();
     for await (const chunk of Bun.stdin.stream()) {
       const chunkText = Buffer.from(chunk).toString();
-      this.receiveLine(chunkText)
+      parser.addChunkToBuffer(chunkText);
+      let parsed;
+      while((parsed = parser.parseBuffer())) {
+        this.emitRequest(parsed)
+      }
     }
+  }
+}
+
+class Parser {
+  private buffer: Array;
+  private contentLength;
+  private contentLengthRegex = /content-length:\ *(?<cl>\d+)\r\n\r\n/i
+  private encoder: TextEncoder;
+  private decoder: TextDecoder;
+  constructor() {
+    this.encoder = new TextEncoder();
+    this.decoder = new TextDecoder();
+    this.buffer = [];
+    this.contentLength = -1;
+    return this;
+  }
+
+  private parseContentLength() {
+      let capture = this.getBuffer().match(this.contentLengthRegex)
+      if (capture === null) {
+        throw new Error(`no Content-Length header in buffer: \"${this.getBuffer()}\"`)
+      };
+      let contentLengthStr = capture.groups?.cl;
+      
+      try {
+        let contentLength = parseInt(contentLengthStr)
+        this.consumeBytesFromBuffer(capture[0].length + capture.index);
+        return contentLength;
+      }
+      catch (e) {
+        log("failed to parse content length header", e.message, `raw buffer: ${this.buffer}`)
+        throw new Error(`Invalid Content-Length header. Expected Integer value, got: ${contentLengthStr}`)
+      }
+  }
+
+  private parseRPC() {
+    let rpc = this.consumeBytesFromBuffer(this.contentLength);
+    return JSON.parse(rpc)
+  }
+
+  addChunkToBuffer(chunk: string) {
+    this.buffer.push(chunk)
+  }
+
+  getBuffer() {
+    return this.buffer.join('')
+  }
+
+  private consumeBytesFromBuffer(bytes: number) {
+    let newBuffer = this.encoder.encode(this.getBuffer()).slice(bytes);
+    let consumed = this.encoder.encode(this.getBuffer()).slice(0, bytes);
+    this.buffer = Array.of(this.decoder.decode(newBuffer));
+    return this.decoder.decode(consumed);
+  }
+  getCurrentBufferSize() {
+    return this.encoder.encode(this.getBuffer()).length
+  }
+  parseBuffer() {
+    let parsed = null;
+    try {
+      if (this.contentLength === -1) {
+        this.contentLength = this.parseContentLength();
+      }
+      if (this.contentLength !== -1 && this.contentLength > 0) {
+        let encodedBuffer = this.encoder.encode(this.getBuffer())
+        if (encodedBuffer.length >= this.contentLength) {
+          parsed = this.parseRPC()
+          this.contentLength = -1;
+        }
+      }
+    }
+    catch(e) {
+     log("failed to parse buffer", e.message, this.buffer)
+    }
+    return parsed;
   }
 }
 
