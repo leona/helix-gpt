@@ -1,5 +1,8 @@
 # helix-gpt
 
+> **⚠️ ARCHIVED**: This repository is now archived. Please use the new Go port instead:
+> - **[helix-assist](https://github.com/leona/helix-assist)** - Much more efficient Go implementation fixing common issues
+
 ![Build Status](https://github.com/leona/helix-gpt/actions/workflows/release.yml/badge.svg)
 ![Github Release](https://img.shields.io/badge/release-v0.34-blue)
 
