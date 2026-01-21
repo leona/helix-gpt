@@ -1,5 +1,6 @@
 {
   "name": "helix-gpt",
+  "version": "0.0.0",
   "module": "src/app.ts",
   "type": "module",
   "scripts": {
